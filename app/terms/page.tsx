@@ -25,7 +25,10 @@ export default function TermsPage() {
 
   return (
     <main className="relative min-h-screen bg-bg" lang={mounted ? lang : 'zh'}>
-      <header className="fixed top-0 left-0 right-0 z-40 border-b border-line glass">
+      <header
+        className="fixed top-0 left-0 right-0 z-40 border-b border-line glass"
+        style={{ paddingTop: 'env(safe-area-inset-top)' }}
+      >
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Link
             href="/"

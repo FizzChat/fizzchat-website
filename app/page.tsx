@@ -139,7 +139,10 @@ export default function Home() {
   return (
     <main className="relative min-h-screen bg-bg" lang={mounted ? lang : 'zh'}>
       {/* Top Nav */}
-      <header className="fixed top-0 left-0 right-0 z-40 border-b border-line glass">
+      <header
+        className="fixed top-0 left-0 right-0 z-40 border-b border-line glass"
+        style={{ paddingTop: 'env(safe-area-inset-top)' }}
+      >
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
           <span className="text-base font-semibold tracking-tight text-ink sm:text-lg">
             {dict.brand}
@@ -166,7 +169,7 @@ export default function Home() {
             <img
               src="/logo.png"
               alt={dict.brand}
-              className="h-auto w-[280px] sm:w-[400px]"
+              className="h-auto w-[220px] sm:w-[300px]"
               style={{ objectFit: 'contain' }}
             />
           </div>
