@@ -29,3 +29,11 @@ next-env.d.ts
 # OS
 .DS_Store
 Thumbs.db
+
+# Claude Code local hooks (not needed in repo)
+.claude/
+
+# Temporary/debug files
+css.out
+page.html
+response.html

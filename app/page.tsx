@@ -166,7 +166,7 @@ export default function Home() {
             <img
               src="/logo.png"
               alt={dict.brand}
-              className="h-auto w-[220px] sm:w-[300px]"
+              className="h-auto w-[280px] sm:w-[400px]"
               style={{ objectFit: 'contain' }}
             />
           </div>
