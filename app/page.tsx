@@ -160,19 +160,21 @@ export default function Home() {
         <div aria-hidden className="absolute inset-0 -z-10 grid-bg" />
 
         <div className="relative mx-auto max-w-5xl px-4 text-center sm:px-6">
-          {/* Hero Logo */}
+          {/* Hero Logo —— 来源 specs/brand/wordmark/wordmark-en-horizontal-onDark.svg
+              （品牌资产包唯一真源，本仓不许自己再画一版）。深色底用反白版。
+              旧的 /logo.png 是 2MB 蓝紫渐变「F」闪电，违反 DESIGN.md「禁蓝紫渐变」，已销毁。 */}
           <div className="animate-fade-up flex justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/logo.png"
+              src="/logo-onDark.svg"
               alt={dict.brand}
               className="h-auto w-[220px] sm:w-[300px]"
               style={{ objectFit: 'contain' }}
             />
           </div>
 
-          {/* negative mt to absorb PNG bottom whitespace; visual gap matches badge↔title */}
-          <div className="-mt-4 sm:-mt-6">
+          {/* SVG 字标已裁到墨迹外接框、无内建留白，不再需要旧 PNG 那个负 margin 去吸底部空白 */}
+          <div className="mt-8 sm:mt-10">
             {/* Badge */}
             <div className="flex justify-center">
               <div className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-line bg-bg-elevated/60 px-3.5 py-1.5 text-[11px] text-ink-soft backdrop-blur sm:text-xs">

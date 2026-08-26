@@ -7,9 +7,13 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://fizzchat.app'),
-  title: 'FizzChat 气泡 · 私密社交 IM',
-  description: 'FizzChat 气泡，专为小圈子打造的私密即时通讯。支持 Windows、Android、iOS，点击直接下载。',
+  // 域名真源 = fizzchat.cc（app./api./adminapi. 全在该域下）。原为 fizzchat.app —— 那不是
+  // 本项目的域名，导致 og:image 解析成 https://fizzchat.app/... 的死链，分享出去没有预览图。
+  metadataBase: new URL('https://fizzchat.cc'),
+  // 品牌名硬规则（specs/glossary.md）：中文一律「气泡」，英文一律「FizzChat」，
+  // 禁止「FizzChat 气泡」这类中英拼接。
+  title: '气泡 · 私密社交 IM',
+  description: '气泡，专为小圈子打造的私密即时通讯。支持 Windows、Android、iOS，点击直接下载。',
   icons: {
     icon: [
       { url: '/icon.png', type: 'image/png', sizes: '512x512' },
@@ -18,9 +22,10 @@ export const metadata: Metadata = {
     apple: '/icon.png',
   },
   openGraph: {
-    title: 'FizzChat 气泡',
+    title: '气泡',
     description: '私密社交 IM · 三端同步 · 极简设计',
-    images: ['/logo.png'],
+    // 来源：specs/brand/social/og-1200x630.png（品牌资产包，勿手改）
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: '气泡 FizzChat' }],
   },
 };
 
