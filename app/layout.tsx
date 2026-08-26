@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { GeistSans } from 'geist/font/sans';
+import { SITE_URL } from '@/lib/site-url';
 import './globals.css';
 
 export const viewport: Viewport = {
@@ -7,9 +8,10 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  // 域名真源 = fizzchat.cc（app./api./adminapi. 全在该域下）。原为 fizzchat.app —— 那不是
-  // 本项目的域名，导致 og:image 解析成 https://fizzchat.app/... 的死链，分享出去没有预览图。
-  metadataBase: new URL('https://fizzchat.cc'),
+  // 托管现状：Vercel 自动部署，fizzchat.cc 尚未绑定（见 lib/site-url.ts 顶部说明）。
+  // 不能写死 'https://fizzchat.cc' —— 绑定前 og:image/canonical 会指向解析不到的死链。
+  // 绑好域名后只需在 Vercel 项目设置加 NEXT_PUBLIC_SITE_URL=https://fizzchat.cc，代码不用改。
+  metadataBase: new URL(SITE_URL),
   // 品牌名硬规则（specs/glossary.md）：中文一律「气泡」，英文一律「FizzChat」，
   // 禁止「FizzChat 气泡」这类中英拼接。
   title: '气泡 · 私密社交 IM',

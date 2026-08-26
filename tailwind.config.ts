@@ -34,11 +34,8 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-geist-sans)', 'PingFang SC', '-apple-system', 'system-ui', 'sans-serif'],
       },
-      backgroundImage: {
-        'brand-gradient': 'linear-gradient(135deg, #5B6CFF 0%, #A855F7 100%)',
-        'grid-fade':
-          'linear-gradient(to bottom, transparent 0%, #08080B 80%), repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 60px), repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 60px)',
-      },
+      // 原 backgroundImage.brand-gradient / grid-fade（均为蓝紫渐变）全仓无引用，
+      // 第二轮验收清理时删除（`grep -rn "brand-gradient\|grid-fade" app lib` 命中为 0）。
       animation: {
         'fade-up': 'fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both',
         'fade-in': 'fadeIn 1s ease-out both',

@@ -27,15 +27,10 @@ body {
 }
 
 @layer utilities {
-  /* .text-gradient（蓝紫渐变）已按 DESIGN.md 设计禁忌移除，主标题改用品牌色纯色文字
-     （tailwind.config.ts 的 brand.teal，见 app/page.tsx）。.text-gradient-brand 是
-     Features 区块小标题用的另一处蓝紫渐变，暂不在本次范围内（T-P1-101 另议整站重设计）。 */
-  .text-gradient-brand {
-    background: linear-gradient(135deg, #5B6CFF 0%, #A855F7 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+  /* .text-gradient 与 .text-gradient-brand（均为蓝紫渐变）已按 DESIGN.md 设计禁忌移除，
+     两处标题都改用 tailwind.config.ts 的 brand.teal 纯色文字（class="text-brand-teal"，
+     见 app/page.tsx 主标题与 Features 区块小标题）。独立验收（ACCEPTANCE_WEBSITE_LOGO_C.md）
+     发现第一轮遗漏了 .text-gradient-brand，本轮一并清理。 */
 
   .glass {
     background: rgba(16, 16, 20, 0.6);
@@ -52,30 +47,19 @@ body {
     }
   }
 
+  /* Hero 背景装饰层：去掉原来的两个蓝紫 radial-gradient 色块（DESIGN.md「禁大面积渐变
+     背景」+「禁蓝紫渐变」双重违规，第二轮验收发现）。保留：① 中性的到页面底色的
+     纵向淡出（用于让 hero 区域自然融进下一屏，不是装饰性色彩渐变）；② 原有的网格线
+     （repeating-linear-gradient 画等距细线，视觉上是网格而非渐变），线色从白色 2.5%
+     改成品牌色 5%——即"极淡品牌色网格"，替代方案里的"中性底"选项之上再加一点品牌感，
+     但透明度足够低，不构成大面积渐变。 */
   .grid-bg {
     background-image:
-      radial-gradient(circle at 50% 0%, rgba(91, 108, 255, 0.18), transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.12), transparent 50%),
       linear-gradient(to bottom, transparent 60%, #08080B 100%),
-      repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0px, rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 64px),
-      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0px, rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 64px);
+      repeating-linear-gradient(0deg, rgba(0, 137, 123, 0.05) 0px, rgba(0, 137, 123, 0.05) 1px, transparent 1px, transparent 64px),
+      repeating-linear-gradient(90deg, rgba(0, 137, 123, 0.05) 0px, rgba(0, 137, 123, 0.05) 1px, transparent 1px, transparent 64px);
   }
 
-  .border-shine {
-    position: relative;
-  }
-  .border-shine::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, rgba(91, 108, 255, 0.3), rgba(168, 85, 247, 0.3) 50%, transparent);
-    -webkit-mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-  }
+  /* .border-shine：死代码，全仓无引用（`git grep border-shine` 只命中定义本身），
+     且原定义也是蓝紫渐变——第二轮验收清理时一并删除，不留着当"以后可能用得上"。 */
 }
