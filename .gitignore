@@ -37,3 +37,6 @@ Thumbs.db
 css.out
 page.html
 response.html
+
+.vercel
+.env*
