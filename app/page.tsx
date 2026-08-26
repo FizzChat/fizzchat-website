@@ -141,9 +141,15 @@ export default function Home() {
       {/* Top Nav */}
       <header className="fixed top-0 left-0 right-0 z-40 border-b border-line glass">
         <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
-          <span className="text-base font-semibold tracking-tight text-ink sm:text-lg">
-            {dict.brand}
-          </span>
+          {/* 顶栏品牌标记 —— 与首屏同一份资产（specs/brand/wordmark/wordmark-en-horizontal-onDark.svg，
+              品牌资产包唯一真源，禁止手改/另画）。不再用纯文字「FizzChat 气泡」：
+              一是品牌规范禁止中英拼接，二是顶栏本该有图形标志而不是纯文字（对照主流站点）。 */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo-onDark.svg"
+            alt={dict.brand}
+            className="h-6 w-auto object-contain sm:h-7"
+          />
           <button
             onClick={toggleLang}
             aria-label="Toggle language"
@@ -162,14 +168,18 @@ export default function Home() {
         <div className="relative mx-auto max-w-5xl px-4 text-center sm:px-6">
           {/* Hero Logo —— 来源 specs/brand/wordmark/wordmark-en-horizontal-onDark.svg
               （品牌资产包唯一真源，本仓不许自己再画一版）。深色底用反白版。
-              旧的 /logo.png 是 2MB 蓝紫渐变「F」闪电，违反 DESIGN.md「禁蓝紫渐变」，已销毁。 */}
+              旧的 /logo.png 是 2MB 蓝紫渐变「F」闪电，违反 DESIGN.md「禁蓝紫渐变」，已销毁。
+              尺寸：BRAND_KIT.md §3.6 把组合标比例定为「标志墨迹高 : 字标墨迹高 = 1.5」后，
+              这份 SVG 的 viewBox 高度就等于标志墨迹高，渲染高度直接等于标志墨迹高。
+              取值对齐 specs/reports/WEBSITE_LOGO_RATIO.md 的主流实测结论——标志应比正文
+              标题更醒目：移动端标题 36px → 标志 56px（≈1.6×）；桌面标题 60px → 标志 88px
+              （≈1.5×），两档都高于「标志高 ≥ 标题字号 1.2 倍」的下限。 */}
           <div className="animate-fade-up flex justify-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logo-onDark.svg"
               alt={dict.brand}
-              className="h-auto w-[220px] sm:w-[300px]"
-              style={{ objectFit: 'contain' }}
+              className="h-14 w-auto object-contain sm:h-[88px]"
             />
           </div>
 
@@ -189,7 +199,9 @@ export default function Home() {
 
             {/* Title: 32px gap from badge, 16px gap between lines */}
             <h1 className="animate-fade-up mt-8 text-4xl font-semibold tracking-tight text-ink sm:text-6xl">
-              <span className="block text-gradient">{dict.titleLine1}</span>
+              {/* 品牌主色文字，替换原蓝紫渐变（DESIGN.md 设计禁忌「❌ 蓝紫渐变配色」）。
+                  不做整站重设计（T-P1-101 另议），仅收窄到这一处主标题。 */}
+              <span className="block text-brand-teal">{dict.titleLine1}</span>
               <span className="mt-4 block text-ink">{dict.titleLine2}</span>
             </h1>
 

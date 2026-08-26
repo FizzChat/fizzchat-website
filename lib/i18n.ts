@@ -47,12 +47,12 @@ export interface Dict {
 
 export const DICTS: Record<Lang, Dict> = {
   zh: {
-    brand: 'FizzChat 气泡',
+    brand: '气泡',
     badge: '私密社交 · 邀请制 · 三端同步',
     badgeShort: '私密社交 · 邀请制',
     titleLine1: '和你的小圈子',
     titleLine2: '轻松对话',
-    subtitle: 'FizzChat 气泡，专为小圈子打造的私密即时通讯。点击下载，即刻开始。',
+    subtitle: '气泡，专为小圈子打造的私密即时通讯。点击下载，即刻开始。',
     downloadNow: '立即下载',
     comingSoon: '敬请期待',
     soon: 'Soon',
@@ -78,7 +78,7 @@ export const DICTS: Record<Lang, Dict> = {
       updatedLabel: '最后更新',
       updatedDate: '2026 年 5 月 10 日',
       intro:
-        'FizzChat 气泡（以下简称"我们"或"本应用"）尊重并保护所有用户的个人隐私。本隐私政策说明我们如何收集、使用、存储、共享您的信息，以及您对自己信息的权利。在使用本应用前，请仔细阅读本政策。',
+        '气泡（以下简称"我们"或"本应用"）尊重并保护所有用户的个人隐私。本隐私政策说明我们如何收集、使用、存储、共享您的信息，以及您对自己信息的权利。在使用本应用前，请仔细阅读本政策。',
       backHome: '← 返回首页',
       sections: [
         {
@@ -158,7 +158,7 @@ export const DICTS: Record<Lang, Dict> = {
       updatedLabel: '最后更新',
       updatedDate: '2026 年 5 月 10 日',
       intro:
-        '欢迎使用 FizzChat 气泡（以下简称"本应用"或"我们"）。本服务条款（以下简称"本条款"）是您与我们之间就使用本应用所订立的协议。请您在使用本应用前仔细阅读本条款；当您注册账号、登录或以任何方式使用本应用，即表示您已充分理解并同意本条款的全部内容。',
+        '欢迎使用气泡（以下简称"本应用"或"我们"）。本服务条款（以下简称"本条款"）是您与我们之间就使用本应用所订立的协议。请您在使用本应用前仔细阅读本条款；当您注册账号、登录或以任何方式使用本应用，即表示您已充分理解并同意本条款的全部内容。',
       backHome: '← 返回首页',
       sections: [
         {

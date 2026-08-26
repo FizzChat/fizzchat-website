@@ -27,13 +27,9 @@ body {
 }
 
 @layer utilities {
-  .text-gradient {
-    background: linear-gradient(135deg, #FFFFFF 0%, #B5BFFF 40%, #D0A8FF 80%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
+  /* .text-gradient（蓝紫渐变）已按 DESIGN.md 设计禁忌移除，主标题改用品牌色纯色文字
+     （tailwind.config.ts 的 brand.teal，见 app/page.tsx）。.text-gradient-brand 是
+     Features 区块小标题用的另一处蓝紫渐变，暂不在本次范围内（T-P1-101 另议整站重设计）。 */
   .text-gradient-brand {
     background: linear-gradient(135deg, #5B6CFF 0%, #A855F7 100%);
     -webkit-background-clip: text;

@@ -26,6 +26,9 @@ const config: Config = {
         brand: {
           blue: '#5B6CFF',
           purple: '#A855F7',
+          // 品牌主色（唯一指定，不可更改）。真源：specs/design/tokens.json
+          // color.brand.teal500，与 specs/CLAUDE.md「主色 #00897B」一致。
+          teal: '#00897B',
         },
       },
       fontFamily: {
