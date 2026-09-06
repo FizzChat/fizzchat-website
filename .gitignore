@@ -40,3 +40,5 @@ response.html
 
 .vercel
 .env*
+# TypeScript 增量编译缓存（npx tsc --noEmit 会生成，不进仓）
+*.tsbuildinfo

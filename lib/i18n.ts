@@ -1,85 +1,183 @@
+/**
+ * 官网文案（zh / en）—— 两种语言各自独立撰写，不是互译。
+ *
+ * 口径（specs/glossary.md）：
+ *   · 品牌名中文一律「气泡」，英文一律「FizzChat」，禁止「FizzChat 气泡」这类中英拼接；
+ *     版权行 © 2026 FizzChat 属标识锁定式（logo lockup），两种语言都用英文品牌名。
+ *   · 英文一律 Sentence case（只大写首词与专有名词），按钮不写成 Title Case。
+ *   · 隐私承诺区块的四条与 specs/CLAUDE.md「全局硬约束 5 · 数据私密性」逐条对应，
+ *     不许自行增删（要改产品红线，先改 CLAUDE.md）。
+ *   · 营销区块只写【已经做到】的事：不出现「端到端加密」「开源」这类当前实现支撑不住的说法。
+ *     法务两页的正文属另一批次，本次一字未动（含其中的同类表述），见交付报告的待拍板项。
+ */
 export type Lang = 'zh' | 'en';
 
-export interface PrivacySection {
+export interface LegalSection {
   title: string;
   body: string[];
 }
 
+export interface LegalDoc {
+  title: string;
+  updatedLabel: string;
+  updatedDate: string;
+  intro: string;
+  backHome: string;
+  sections: LegalSection[];
+}
+
+export interface FeatureItem {
+  title: string;
+  desc: string;
+}
+
 export interface Dict {
   brand: string;
-  badge: string;
-  badgeShort: string;
-  titleLine1: string;
-  titleLine2: string;
-  subtitle: string;
-  downloadNow: string;
-  comingSoon: string;
-  soon: string;
-  bottomNote: string;
-  featuresTitle: { plain1: string; gradient: string };
-  featuresSubtitle: string;
-  features: { title: string; desc: string }[];
-  copyright: string;
+  /** 语言切换按钮上显示的【目标】语言，不是当前语言 */
   langLabel: string;
-  windowsSub: string;
-  androidSub: string;
-  iosSub: string;
-  testflightHint: string;
-  privacyLink: string;
-  termsLink: string;
-  privacy: {
-    title: string;
-    updatedLabel: string;
-    updatedDate: string;
-    intro: string;
-    backHome: string;
-    sections: PrivacySection[];
+  a11y: {
+    skipToContent: string;
+    toggleLang: string;
+    toLight: string;
+    toDark: string;
+    homeLink: string;
+    sectionNav: string;
+    footerNav: string;
   };
-  terms: {
-    title: string;
-    updatedLabel: string;
-    updatedDate: string;
-    intro: string;
-    backHome: string;
-    sections: PrivacySection[];
+  nav: {
+    promise: string;
+    download: string;
   };
+  hero: {
+    badge: string;
+    title: string;
+    lead: string;
+    ctaPrimary: string;
+    ctaSecondary: string;
+    platforms: string;
+  };
+  values: {
+    title: string;
+    lead: string;
+    items: FeatureItem[];
+  };
+  promise: {
+    title: string;
+    lead: string;
+    items: FeatureItem[];
+    more: string;
+  };
+  download: {
+    title: string;
+    lead: string;
+    pendingLabel: string;
+    pendingHint: string;
+    testflightHint: string;
+    windowsSub: string;
+    androidSub: string;
+    iosSub: string;
+  };
+  footer: {
+    copyright: string;
+    privacyLink: string;
+    termsLink: string;
+    contactLabel: string;
+    email: string;
+  };
+  privacy: LegalDoc;
+  terms: LegalDoc;
 }
 
 export const DICTS: Record<Lang, Dict> = {
   zh: {
     brand: '气泡',
-    badge: '私密社交 · 邀请制 · 三端同步',
-    badgeShort: '私密社交 · 邀请制',
-    titleLine1: '和你的小圈子',
-    titleLine2: '轻松对话',
-    subtitle: '气泡，专为小圈子打造的私密即时通讯。点击下载，即刻开始。',
-    downloadNow: '立即下载',
-    comingSoon: '敬请期待',
-    soon: 'Soon',
-    bottomNote: '开源透明 · 无追踪 · 安全可控',
-    featuresTitle: { plain1: '简洁，但不', gradient: '简单' },
-    featuresSubtitle: '所有你需要的，都在这里。所有你不需要的，都不会出现。',
-    features: [
-      { title: '私密社交', desc: '邀请制注册，专为小圈子打造。对话内容只在圈内流动，外人进不来。' },
-      { title: '安全可控', desc: '端到端加密传输，独立部署，数据完全自主掌握，无第三方介入。' },
-      { title: '极速响应', desc: '基于 OpenIM 高性能内核，毫秒级消息触达，三端实时同步。' },
-      { title: '极简体验', desc: '去掉一切不必要的，只保留最纯粹的对话。所见即所得。' },
-    ],
-    copyright: '© 2026 FizzChat',
     langLabel: 'EN',
-    windowsSub: 'Windows 10 / 11 · 64-bit',
-    androidSub: 'Android 8.0+',
-    iosSub: 'iPhone · iPad',
-    testflightHint: '通过 TestFlight 安装',
-    privacyLink: '隐私政策',
-    termsLink: '服务条款',
+    a11y: {
+      skipToContent: '跳到正文',
+      toggleLang: '切换语言',
+      toLight: '切换到浅色外观',
+      toDark: '切换到深色外观',
+      homeLink: '气泡首页',
+      sectionNav: '本页分区',
+      footerNav: '页脚',
+    },
+    nav: {
+      promise: '我们不做什么',
+      download: '下载',
+    },
+    hero: {
+      badge: '邀请制 · 手机和电脑同步',
+      title: '和熟人说话的地方',
+      lead: '气泡靠邀请加入，进来的都是你认得的人。说过的话留在这儿，不会被带去别处。',
+      ctaPrimary: '下载气泡',
+      ctaSecondary: '看看我们不做什么',
+      platforms: 'Windows · Android · iOS',
+    },
+    values: {
+      title: '气泡的三件事',
+      lead: '不复杂，就这些。',
+      items: [
+        {
+          title: '邀请才进得来',
+          desc: '注册需要一个邀请。没有「附近的人」，也没有陌生人按号码搜到你。',
+        },
+        {
+          title: '跑在自己的服务器上',
+          desc: '服务和数据都在我们自己的机器里。不做广告生意，也没有别人的统计代码。',
+        },
+        {
+          title: '手机和电脑一起用',
+          desc: 'Windows、Android、iOS 各登各的，消息、图片和语音都同步。',
+        },
+      ],
+    },
+    promise: {
+      title: '我们不做的四件事',
+      lead: '不是暂时没做，是不会做。',
+      items: [
+        {
+          title: '不把聊天发到气泡之外',
+          desc: '消息只能转发给气泡里的人，没有「分享到其它应用」这一步。',
+        },
+        {
+          title: '不提供聊天记录导出',
+          desc: '没有把记录导成文件的按钮，也没有备份到网盘的通道。',
+        },
+        {
+          title: '不生成对外链接',
+          desc: '动态和聊天内容都不会有一条外面能打开的网址。',
+        },
+        {
+          title: '不接第三方追踪和广告',
+          desc: '没有统计 SDK，没有广告位，不拿你的行为去做画像。',
+        },
+      ],
+      more: '完整说明见隐私政策',
+    },
+    download: {
+      title: '下载气泡',
+      lead: '一个账号，三端通用。',
+      pendingLabel: '暂未开放',
+      pendingHint: '安装包还在准备，开放后这里直接给出下载地址。',
+      testflightHint: '通过 TestFlight 安装',
+      windowsSub: 'Windows 10 / 11 · 64 位',
+      androidSub: 'Android 8.0 及以上',
+      iosSub: 'iPhone · iPad',
+    },
+    footer: {
+      copyright: '© 2026 FizzChat',
+      privacyLink: '隐私政策',
+      termsLink: '服务条款',
+      contactLabel: '联系我们',
+      email: 'privacy@fizzchat.app',
+    },
     privacy: {
       title: '隐私政策',
       updatedLabel: '最后更新',
       updatedDate: '2026 年 5 月 10 日',
       intro:
         '气泡（以下简称"我们"或"本应用"）尊重并保护所有用户的个人隐私。本隐私政策说明我们如何收集、使用、存储、共享您的信息，以及您对自己信息的权利。在使用本应用前，请仔细阅读本政策。',
-      backHome: '← 返回首页',
+      backHome: '返回首页',
       sections: [
         {
           title: '一、我们收集的信息',
@@ -159,7 +257,7 @@ export const DICTS: Record<Lang, Dict> = {
       updatedDate: '2026 年 5 月 10 日',
       intro:
         '欢迎使用气泡（以下简称"本应用"或"我们"）。本服务条款（以下简称"本条款"）是您与我们之间就使用本应用所订立的协议。请您在使用本应用前仔细阅读本条款；当您注册账号、登录或以任何方式使用本应用，即表示您已充分理解并同意本条款的全部内容。',
-      backHome: '← 返回首页',
+      backHome: '返回首页',
       sections: [
         {
           title: '一、用户行为规范',
@@ -233,50 +331,93 @@ export const DICTS: Record<Lang, Dict> = {
   },
   en: {
     brand: 'FizzChat',
-    badge: 'Private · Invite-Only · Cross-Platform',
-    badgeShort: 'Private · Invite-Only',
-    titleLine1: 'Your Circle',
-    titleLine2: 'Your Conversations',
-    subtitle: 'Private messaging built for close-knit communities. Download and get started.',
-    downloadNow: 'Download Now',
-    comingSoon: 'Coming Soon',
-    soon: 'Soon',
-    bottomNote: 'Open Source · No Tracking · Secure by Design',
-    featuresTitle: { plain1: 'Simple, but not ', gradient: 'simplistic' },
-    featuresSubtitle: 'Everything you need. Nothing you don’t.',
-    features: [
-      {
-        title: 'Private by Design',
-        desc: 'Invite-only registration. Conversations stay within your circle — outsiders cannot join.',
-      },
-      {
-        title: 'Secure & Self-Hosted',
-        desc: 'End-to-end encrypted transport, self-hosted, full data ownership with no third-party access.',
-      },
-      {
-        title: 'Lightning Fast',
-        desc: 'Powered by the OpenIM high-performance core. Millisecond delivery, real-time sync across devices.',
-      },
-      {
-        title: 'Pure & Minimal',
-        desc: 'Stripped of everything unnecessary. Just pure conversation, exactly as you see it.',
-      },
-    ],
-    copyright: '© 2026 FizzChat',
-    langLabel: '中',
-    windowsSub: 'Windows 10 / 11 · 64-bit',
-    androidSub: 'Android 8.0+',
-    iosSub: 'iPhone · iPad',
-    testflightHint: 'Install via TestFlight',
-    privacyLink: 'Privacy Policy',
-    termsLink: 'Terms of Service',
+    langLabel: '中文',
+    a11y: {
+      skipToContent: 'Skip to content',
+      toggleLang: 'Change language',
+      toLight: 'Switch to light appearance',
+      toDark: 'Switch to dark appearance',
+      homeLink: 'FizzChat home',
+      sectionNav: 'Page sections',
+      footerNav: 'Footer',
+    },
+    nav: {
+      promise: 'What we don’t do',
+      download: 'Download',
+    },
+    hero: {
+      badge: 'Invite-only · Phone and desktop',
+      title: 'A place to talk with people you already know',
+      lead: 'FizzChat runs on invites, so everyone here is someone you recognise. What gets said stays here — it doesn’t travel anywhere else.',
+      ctaPrimary: 'Download FizzChat',
+      ctaSecondary: 'See what we don’t do',
+      platforms: 'Windows · Android · iOS',
+    },
+    values: {
+      title: 'Three things to know',
+      lead: 'That’s the whole idea.',
+      items: [
+        {
+          title: 'Invite-only',
+          desc: 'You need an invite to sign up. There is no people nearby, no friend suggestions, and no way for a stranger to look you up.',
+        },
+        {
+          title: 'Servers we run ourselves',
+          desc: 'The service and its data sit on machines we operate. No ad business, and no analytics code from anyone else.',
+        },
+        {
+          title: 'Phone and desktop together',
+          desc: 'Sign in on Windows, Android and iOS. Messages, photos and voice notes stay in sync.',
+        },
+      ],
+    },
+    promise: {
+      title: 'Four things we don’t do',
+      lead: 'Not “not yet” — these are off the table.',
+      items: [
+        {
+          title: 'No sharing outside FizzChat',
+          desc: 'A message can be forwarded to another FizzChat chat, and nowhere else.',
+        },
+        {
+          title: 'No chat export',
+          desc: 'There is no button that turns your history into a file, and no backup to anyone’s drive.',
+        },
+        {
+          title: 'No public links',
+          desc: 'Nothing you post gets a web address that opens outside the app.',
+        },
+        {
+          title: 'No trackers, no ads',
+          desc: 'No analytics SDKs, no ad slots, and no profile built out of what you do.',
+        },
+      ],
+      more: 'The full wording lives in our privacy policy',
+    },
+    download: {
+      title: 'Download FizzChat',
+      lead: 'One account across all three platforms.',
+      pendingLabel: 'Not yet',
+      pendingHint: 'Builds are still being prepared. Links will show up here once they are out.',
+      testflightHint: 'Install through TestFlight',
+      windowsSub: 'Windows 10 / 11 · 64-bit',
+      androidSub: 'Android 8.0 and above',
+      iosSub: 'iPhone · iPad',
+    },
+    footer: {
+      copyright: '© 2026 FizzChat',
+      privacyLink: 'Privacy policy',
+      termsLink: 'Terms of service',
+      contactLabel: 'Contact us',
+      email: 'privacy@fizzchat.app',
+    },
     privacy: {
       title: 'Privacy Policy',
       updatedLabel: 'Last updated',
       updatedDate: 'May 10, 2026',
       intro:
         'FizzChat ("we", "us", or "the app") respects and protects the privacy of every user. This Privacy Policy explains how we collect, use, store, and share your information, and what rights you have over your data. Please read it carefully before using the app.',
-      backHome: '← Back to Home',
+      backHome: 'Back to home',
       sections: [
         {
           title: '1. Information We Collect',
@@ -356,7 +497,7 @@ export const DICTS: Record<Lang, Dict> = {
       updatedDate: 'May 10, 2026',
       intro:
         'Welcome to FizzChat ("the app", "we", or "us"). These Terms of Service ("Terms") form the agreement between you and us regarding your use of the app. Please read them carefully before using the app. By registering an account, signing in, or using the app in any way, you confirm that you have fully understood and agreed to all of these Terms.',
-      backHome: '← Back to Home',
+      backHome: 'Back to home',
       sections: [
         {
           title: '1. User Conduct',

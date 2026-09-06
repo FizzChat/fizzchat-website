@@ -1,281 +1,258 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   Apple,
-  Smartphone,
-  Monitor,
-  ArrowUpRight,
-  ShieldCheck,
-  Sparkles,
-  Lock,
-  Zap,
+  ArrowRight,
   Download,
-  Globe,
+  FileX,
+  Link2Off,
+  EyeOff,
+  MessageCircleOff,
+  Monitor,
+  MonitorSmartphone,
+  Server,
+  Smartphone,
+  UserRoundCheck,
+  type LucideIcon,
 } from 'lucide-react';
-import { DOWNLOADS, type DownloadInfo, type Platform } from '@/lib/downloads';
-import { DICTS, detectInitialLang, type Dict, type Lang } from '@/lib/i18n';
+import { DOWNLOADS, PLATFORM_ORDER, isDownloadable, type DownloadInfo } from '@/lib/downloads';
+import type { Dict } from '@/lib/i18n';
+import { useSitePrefs } from './_components/prefs';
+import { SiteHeader } from './_components/site-header';
+import { SiteFooter } from './_components/site-footer';
 
-const PLATFORM_ICONS = {
+/**
+ * 首页区块顺序（信息目标见 specs/reports/WEBSITE_REDESIGN_2026-09-06.md §1）：
+ *   顶栏 → 首屏主张 → 三点价值 → 隐私承诺（我们不做什么）→ 下载 → 页脚
+ * 对标 Telegram / Signal 官网的克制结构：一屏一件事，没有轮播、没有客户评价、
+ * 没有「立即免费试用」这类 SaaS 话术。
+ */
+
+/** 三点价值的图标：全部 lucide 线性、strokeWidth 2、正向语义 */
+const VALUE_ICONS: LucideIcon[] = [UserRoundCheck, Server, MonitorSmartphone];
+
+/**
+ * 隐私承诺四条的图标：刻意全部选「否定态」字形（带斜杠/叉），成套规则单一 ——
+ * 消息出不去 / 没有导出文件 / 没有外链 / 没有人在旁边看着。
+ */
+const PROMISE_ICONS: LucideIcon[] = [MessageCircleOff, FileX, Link2Off, EyeOff];
+
+const PLATFORM_ICONS: Record<DownloadInfo['platform'], LucideIcon> = {
   windows: Monitor,
   android: Smartphone,
   ios: Apple,
 };
 
-function DownloadCard({
-  info,
-  dict,
+const PRIMARY_BUTTON =
+  'inline-flex h-12 w-full max-w-xs items-center justify-center gap-2 rounded-ctl bg-brand-solid ' +
+  'px-6 text-button font-semibold text-on-brand transition-colors duration-150 ' +
+  'hover:bg-brand-solid-hover active:bg-brand-solid-active focus-visible:shadow-focus ' +
+  'sm:w-auto sm:max-w-none';
+
+const SECONDARY_BUTTON =
+  'inline-flex h-12 w-full max-w-xs items-center justify-center gap-2 rounded-ctl border ' +
+  'border-line bg-surface px-6 text-button font-semibold text-ink transition-colors duration-150 ' +
+  'hover:border-brand hover:bg-brand-tint hover:text-brand-text focus-visible:shadow-focus ' +
+  'sm:w-auto sm:max-w-none';
+
+const ICON_TILE =
+  'flex h-10 w-10 items-center justify-center rounded-ctl bg-brand-tint text-brand-text';
+
+function IconTile({ icon: Icon }: { icon: LucideIcon }) {
+  return (
+    <span className={ICON_TILE}>
+      <Icon className="h-5 w-5" strokeWidth={2} aria-hidden="true" />
+    </span>
+  );
+}
+
+function SectionHeading({ title, lead }: { title: string; lead: string }) {
+  return (
+    <div className="max-w-prose">
+      <h2 className="text-d4 font-bold text-ink sm:text-d3">{title}</h2>
+      <p className="mt-3 text-body text-ink-2 sm:text-lead">{lead}</p>
+    </div>
+  );
+}
+
+function FeatureCard({
+  icon,
+  title,
+  desc,
 }: {
-  info: DownloadInfo;
-  dict: Dict;
+  icon: LucideIcon;
+  title: string;
+  desc: string;
 }) {
+  return (
+    <div className="rounded-card border border-line bg-surface p-4 sm:p-6">
+      <IconTile icon={icon} />
+      <h3 className="mt-4 text-title font-semibold text-ink">{title}</h3>
+      <p className="mt-2 text-body text-ink-2">{desc}</p>
+    </div>
+  );
+}
+
+function DownloadCard({ info, dict }: { info: DownloadInfo; dict: Dict }) {
   const Icon = PLATFORM_ICONS[info.platform];
-  const disabled = !info.available;
+  const subLabel = {
+    windows: dict.download.windowsSub,
+    android: dict.download.androidSub,
+    ios: dict.download.iosSub,
+  }[info.platform];
 
-  const subLabelMap: Record<Platform, string> = {
-    windows: dict.windowsSub,
-    android: dict.androidSub,
-    ios: dict.iosSub,
-  };
-  const subLabel = subLabelMap[info.platform];
-
-  if (disabled) {
-    return (
-      <div
-        aria-disabled="true"
-        className="group relative overflow-hidden rounded-2xl border border-line/60 bg-bg-elevated/40 p-6 text-left opacity-60"
-        style={{ cursor: 'default' }}
-      >
-        <div className="relative flex items-start justify-between">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-line/60 bg-bg-subtle/60">
-            <Icon className="h-5 w-5 text-ink-muted" strokeWidth={1.6} />
-          </div>
-          <span className="rounded-full border border-line/60 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-ink-muted">
-            {dict.soon}
+  const head = (
+    <>
+      <div className="flex items-start justify-between gap-3">
+        <IconTile icon={Icon} />
+        {!isDownloadable(info) && (
+          <span className="rounded-full border border-line bg-surface-hover px-2.5 py-1 text-caption font-semibold text-ink-2">
+            {dict.download.pendingLabel}
           </span>
-        </div>
-
-        <div className="relative mt-6">
-          <div className="text-lg font-semibold tracking-tight text-ink-soft">{info.label}</div>
-          <div className="mt-1 text-xs text-ink-muted">{subLabel}</div>
-        </div>
-
-        <div className="relative mt-6 flex items-center justify-between border-t border-line/60 pt-4">
-          <span className="text-xs font-medium text-amber-400/80">{dict.comingSoon}</span>
-        </div>
+        )}
       </div>
+      <div className="mt-4">
+        <div className="text-title font-semibold text-ink">{info.label}</div>
+        <div className="mt-1 text-sub text-ink-2">{subLabel}</div>
+      </div>
+    </>
+  );
+
+  // 没有安装包地址时渲染成不可点的说明卡，而不是点了没反应的死按钮
+  // （frontend-ia-discipline.md 二·5「不许有假入口」）。
+  if (!isDownloadable(info)) {
+    return (
+      <div className="rounded-card border border-line bg-surface p-4 sm:p-6">{head}</div>
     );
   }
 
-  const isTestflight = !!info.testflight;
+  const external = Boolean(info.testflight);
 
   return (
     <a
-      href={info.url ?? '#'}
+      href={info.url ?? undefined}
       download={info.filename ?? undefined}
-      target={isTestflight ? '_blank' : undefined}
-      rel={isTestflight ? 'noopener noreferrer' : undefined}
-      className="group relative overflow-hidden rounded-2xl border border-line bg-bg-elevated p-6 text-left transition-all duration-300 hover:-translate-y-0.5 hover:border-line-strong hover:bg-bg-subtle"
+      target={external ? '_blank' : undefined}
+      rel={external ? 'noopener noreferrer' : undefined}
+      className="rounded-card border border-line bg-surface p-4 transition-colors duration-150 hover:border-brand hover:bg-surface-hover focus-visible:shadow-focus sm:p-6"
     >
-      {/* hover 高光：平色品牌高亮（10% 不透明度）+ blur 柔化边缘，不用渐变
-          （替换原蓝紫 radial-gradient，DESIGN.md 设计禁忌）。 */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -inset-x-12 -top-24 h-32 bg-brand-teal/10 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100"
-      />
-
-      <div className="relative flex items-start justify-between">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-line bg-bg-subtle">
-          <Icon className="h-5 w-5 text-ink" strokeWidth={1.6} />
-        </div>
-        <ArrowUpRight
-          className="h-5 w-5 text-ink-muted transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-ink"
-          strokeWidth={1.8}
-        />
+      {head}
+      <div className="mt-4 flex items-center justify-between border-t border-line pt-4">
+        <span className="inline-flex items-center gap-1.5 text-body font-semibold text-brand-text">
+          <Download className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+          {dict.nav.download}
+        </span>
+        {info.version && <span className="text-caption text-ink-2">{info.version}</span>}
       </div>
-
-      <div className="relative mt-6">
-        <div className="text-lg font-semibold tracking-tight text-ink">{info.label}</div>
-        <div className="mt-1 text-xs text-ink-muted">{subLabel}</div>
-      </div>
-
-      <div className="relative mt-6 border-t border-line pt-4">
-        <div className="flex items-center justify-between">
-          <span className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-soft">
-            <Download className="h-3.5 w-3.5" strokeWidth={2} />
-            {dict.downloadNow}
-          </span>
-          <span className="text-xs font-mono text-ink-muted">{info.version}</span>
-        </div>
-        {isTestflight && (
-          <div className="mt-1.5 text-[11px] text-ink-muted">{dict.testflightHint}</div>
-        )}
-      </div>
+      {external && (
+        <p className="mt-2 text-caption text-ink-2">{dict.download.testflightHint}</p>
+      )}
     </a>
   );
 }
 
-const FEATURE_ICONS = [Lock, ShieldCheck, Zap, Sparkles];
-
 export default function HomeClient() {
-  const [lang, setLang] = useState<Lang>('zh');
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setLang(detectInitialLang());
-    setMounted(true);
-  }, []);
-
-  const toggleLang = () => {
-    const next: Lang = lang === 'zh' ? 'en' : 'zh';
-    setLang(next);
-    if (typeof window !== 'undefined') window.localStorage.setItem('lang', next);
-  };
-
-  const dict = DICTS[lang];
+  const { dict } = useSitePrefs();
+  const anyPending = PLATFORM_ORDER.some((p) => !isDownloadable(DOWNLOADS[p]));
 
   return (
-    <main className="relative min-h-screen bg-bg" lang={mounted ? lang : 'zh'}>
-      {/* Top Nav */}
-      <header className="fixed top-0 left-0 right-0 z-40 border-b border-line glass">
-        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
-          {/* 顶栏品牌标记 —— 与首屏同一份资产（specs/brand/wordmark/wordmark-en-horizontal-onDark.svg，
-              品牌资产包唯一真源，禁止手改/另画）。不再用纯文字「FizzChat 气泡」：
-              一是品牌规范禁止中英拼接，二是顶栏本该有图形标志而不是纯文字（对照主流站点）。 */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/logo-onDark.svg"
-            alt={dict.brand}
-            className="h-6 w-auto object-contain sm:h-7"
-          />
-          <button
-            onClick={toggleLang}
-            aria-label="Toggle language"
-            className="inline-flex items-center gap-1.5 rounded-full border border-line bg-bg-elevated/60 px-3 py-1.5 text-xs font-medium text-ink-soft transition-colors hover:border-line-strong hover:text-ink"
-          >
-            <Globe className="h-3.5 w-3.5" strokeWidth={1.8} />
-            <span className="font-mono">{dict.langLabel}</span>
-          </button>
-        </div>
-      </header>
+    <>
+      <SiteHeader showSectionNav />
 
-      {/* Hero - rhythm: tight group → mid gap → section gap */}
-      <section id="download" className="relative pt-20 pb-24 sm:pt-24 sm:pb-32">
-        <div aria-hidden className="absolute inset-0 -z-10 grid-bg" />
+      <main id="main">
+        {/* ── 首屏：一句主张 + 一句解释 + 两个动作 ───────────────────────── */}
+        <section className="bg-canvas">
+          <div className="mx-auto max-w-site px-4 py-12 text-center sm:px-6 sm:py-16">
+            <p className="inline-flex items-center gap-2 rounded-full border border-line bg-brand-tint px-3 py-1 text-caption font-semibold text-brand-text">
+              <span className="h-1.5 w-1.5 rounded-full bg-brand" aria-hidden="true" />
+              {dict.hero.badge}
+            </p>
 
-        <div className="relative mx-auto max-w-5xl px-4 text-center sm:px-6">
-          {/* Hero Logo —— 来源 specs/brand/wordmark/wordmark-en-horizontal-onDark.svg
-              （品牌资产包唯一真源，本仓不许自己再画一版）。深色底用反白版。
-              旧的 /logo.png 是 2MB 蓝紫渐变「F」闪电，违反 DESIGN.md「禁蓝紫渐变」，已销毁。
-              尺寸：BRAND_KIT.md §3.6 把组合标比例定为「标志墨迹高 : 字标墨迹高 = 1.5」后，
-              这份 SVG 的 viewBox 高度就等于标志墨迹高，渲染高度直接等于标志墨迹高。
-              取值对齐 specs/reports/WEBSITE_LOGO_RATIO.md 的主流实测结论——标志应比正文
-              标题更醒目：移动端标题 36px → 标志 56px（≈1.6×）；桌面标题 60px → 标志 88px
-              （≈1.5×），两档都高于「标志高 ≥ 标题字号 1.2 倍」的下限。 */}
-          <div className="animate-fade-up flex justify-center">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/logo-onDark.svg"
-              alt={dict.brand}
-              className="h-14 w-auto object-contain sm:h-[88px]"
-            />
-          </div>
-
-          {/* SVG 字标已裁到墨迹外接框、无内建留白，不再需要旧 PNG 那个负 margin 去吸底部空白 */}
-          <div className="mt-8 sm:mt-10">
-            {/* Badge */}
-            <div className="flex justify-center">
-              <div className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-line bg-bg-elevated/60 px-3.5 py-1.5 text-[11px] text-ink-soft backdrop-blur sm:text-xs">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-blue opacity-75" />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-blue" />
-                </span>
-                <span className="hidden sm:inline">{dict.badge}</span>
-                <span className="sm:hidden">{dict.badgeShort}</span>
-              </div>
-            </div>
-
-            {/* Title: 32px gap from badge, 16px gap between lines */}
-            <h1 className="animate-fade-up mt-8 text-4xl font-semibold tracking-tight text-ink sm:text-6xl">
-              {/* 品牌主色文字，替换原蓝紫渐变（DESIGN.md 设计禁忌「❌ 蓝紫渐变配色」）。
-                  不做整站重设计（T-P1-101 另议），仅收窄到这一处主标题。 */}
-              <span className="block text-brand-teal">{dict.titleLine1}</span>
-              <span className="mt-4 block text-ink">{dict.titleLine2}</span>
+            <h1 className="mx-auto mt-6 max-w-3xl text-d3 font-bold text-ink sm:text-d2 lg:text-d1">
+              {dict.hero.title}
             </h1>
 
-            {/* Subtitle: gap matches subtitle↔cards (32/40px) */}
-            <p className="animate-fade-up mx-auto mt-8 max-w-xl text-sm leading-relaxed text-ink-soft sm:mt-10 sm:text-base">
-              {dict.subtitle}
+            <p className="mx-auto mt-4 max-w-prose text-lead font-normal text-ink-2 sm:mt-6 sm:text-title">
+              {dict.hero.lead}
+            </p>
+
+            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <a href="#download" className={PRIMARY_BUTTON}>
+                {dict.hero.ctaPrimary}
+                <ArrowRight className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+              </a>
+              <a href="#promise" className={SECONDARY_BUTTON}>
+                {dict.hero.ctaSecondary}
+              </a>
+            </div>
+
+            <p className="mt-6 text-caption text-ink-2">{dict.hero.platforms}</p>
+          </div>
+        </section>
+
+        {/* ── 三点价值 ──────────────────────────────────────────────── */}
+        <section className="border-t border-line bg-raised">
+          <div className="mx-auto max-w-site px-4 py-12 sm:px-6 sm:py-16">
+            <SectionHeading title={dict.values.title} lead={dict.values.lead} />
+            <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+              {dict.values.items.map((item, i) => (
+                <FeatureCard
+                  key={item.title}
+                  icon={VALUE_ICONS[i] ?? UserRoundCheck}
+                  title={item.title}
+                  desc={item.desc}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── 隐私承诺：我们不做的四件事 ───────────────────────────────── */}
+        <section id="promise" className="border-t border-line bg-canvas">
+          <div className="mx-auto max-w-site px-4 py-12 sm:px-6 sm:py-16">
+            <SectionHeading title={dict.promise.title} lead={dict.promise.lead} />
+            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {dict.promise.items.map((item, i) => (
+                <FeatureCard
+                  key={item.title}
+                  icon={PROMISE_ICONS[i] ?? MessageCircleOff}
+                  title={item.title}
+                  desc={item.desc}
+                />
+              ))}
+            </div>
+            <p className="mt-6">
+              <Link
+                href="/privacy/"
+                className="inline-flex items-center gap-1.5 rounded-ctl text-body font-semibold text-brand-text underline-offset-4 transition-colors duration-150 hover:underline"
+              >
+                {dict.promise.more}
+                <ArrowRight className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+              </Link>
             </p>
           </div>
+        </section>
 
-          {/* gap between subtitle and downloads (matches title↔subtitle) */}
-          <div
-            id="download-cards"
-            className="animate-fade-up mt-8 grid grid-cols-1 gap-4 sm:mt-10 sm:grid-cols-3"
-          >
-            <DownloadCard info={DOWNLOADS.windows} dict={dict} />
-            <DownloadCard info={DOWNLOADS.android} dict={dict} />
-            <DownloadCard info={DOWNLOADS.ios} dict={dict} />
+        {/* ── 下载 ─────────────────────────────────────────────────── */}
+        <section id="download" className="border-t border-line bg-raised">
+          <div className="mx-auto max-w-site px-4 py-12 sm:px-6 sm:py-16">
+            <SectionHeading title={dict.download.title} lead={dict.download.lead} />
+            <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+              {PLATFORM_ORDER.map((platform) => (
+                <DownloadCard key={platform} info={DOWNLOADS[platform]} dict={dict} />
+              ))}
+            </div>
+            {anyPending && (
+              <p className="mt-4 max-w-prose text-body text-ink-2">
+                {dict.download.pendingHint}
+              </p>
+            )}
           </div>
+        </section>
+      </main>
 
-          {/* 32px gap from cards */}
-          <p className="mt-8 text-[11px] text-ink-muted sm:text-xs">{dict.bottomNote}</p>
-        </div>
-      </section>
-
-      {/* Features - top gap (divider→h2) == bottom gap (subtitle→cards) */}
-      <section id="features" className="relative border-t border-line py-16 sm:py-20">
-        <div className="mx-auto max-w-6xl px-4 text-center sm:px-6">
-          <div className="mx-auto mb-16 max-w-2xl sm:mb-20">
-            <h2 className="text-3xl font-semibold tracking-tight text-ink sm:text-5xl">
-              {dict.featuresTitle.plain1}
-              {/* 品牌色纯色文字，替换原蓝紫渐变 .text-gradient-brand（DESIGN.md 设计禁忌，
-                  第二轮验收发现的遗留）。 */}
-              <span className="text-brand-teal">{dict.featuresTitle.gradient}</span>
-            </h2>
-            <p className="mt-3 text-sm text-ink-soft sm:mt-4 sm:text-base">
-              {dict.featuresSubtitle}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-2">
-            {dict.features.map(({ title, desc }, i) => {
-              const Icon = FEATURE_ICONS[i];
-              return (
-                <div
-                  key={title}
-                  className="group relative flex flex-col items-center bg-bg-elevated p-6 text-center transition-colors hover:bg-bg-subtle sm:p-8"
-                >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-line bg-bg">
-                    <Icon className="h-5 w-5 text-ink" strokeWidth={1.6} />
-                  </div>
-                  <h3 className="mt-5 text-base font-semibold tracking-tight text-ink sm:text-lg">
-                    {title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-ink-soft">{desc}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-line py-10 sm:py-12">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-2 gap-y-1 px-4 text-sm text-ink-muted sm:px-6">
-          <span>{dict.copyright}</span>
-          <span aria-hidden>·</span>
-          <Link href="/privacy" className="transition-colors hover:text-ink">
-            {dict.privacyLink}
-          </Link>
-          <span aria-hidden>·</span>
-          <Link href="/terms" className="transition-colors hover:text-ink">
-            {dict.termsLink}
-          </Link>
-        </div>
-      </footer>
-    </main>
+      <SiteFooter />
+    </>
   );
 }
