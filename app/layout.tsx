@@ -21,9 +21,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   // 品牌名硬规则（specs/glossary.md）：中文一律「气泡」，英文一律「FizzChat」，
   // 禁止「FizzChat 气泡」这类中英拼接。静态导出只有一份 HTML，默认语言取中文。
-  title: '气泡 · 和熟人说话的地方',
+  title: '气泡 · 熟人之间的私密通讯',
   description:
-    '气泡是给熟人用的私密社交软件：邀请才进得来，消息不外传，Windows、Android、iOS 三端同步。',
+    '气泡（FizzChat）是面向熟人关系的私密通讯应用：采用邀请制注册，聊天内容不外发，支持 Windows、Android、iOS 多端同步。',
   icons: {
     icon: [{ url: '/icon.png', type: 'image/png', sizes: '512x512' }],
     shortcut: '/icon.png',
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: '气泡',
-    description: '和熟人说话的地方 · 邀请制 · 三端同步',
+    description: '熟人之间的私密通讯 · 邀请制注册 · 多端同步',
     // 来源：specs/brand/social/og-1200x630.png（品牌资产包，勿手改）
-    images: [{ url: '/og.png', width: 1200, height: 630, alt: '气泡 FizzChat' }],
+    images: [{ url: '/og.png', width: 1200, height: 630, alt: '气泡' }],
   },
 };
 

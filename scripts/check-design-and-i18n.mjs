@@ -6,6 +6,9 @@
  *      也不许出现「FizzChat 气泡」这种被 glossary 明令禁止的中英拼接。
  *   ② 组件引用的字典路径：tsx 里每一个 dict.x.y 都必须在两种语言里真的存在
  *      （TS 已经查过类型，但 i18n 是数据，键写错了类型层不一定拦得住）。
+ *   ②b 文案语域：官网是给外部看的门面，用户 2026-09-06 三次点名「大白话、不专业」。
+ *      把当时剔除的口语表达固化成禁用词表 + 中文长度上限 + 事实红线，写回去就红。
+ *      词表与 specs/scripts/copy_register_lint.py 的 [E1-site] 同源，且有同步自检。
  *   ③ 设计系统对比度：把 globals.css 里两套主题的 CSS 变量取出来，
  *      按页面【实际用到的】前景/背景配对算 WCAG 2.1 对比度，低于阈值直接失败。
  *      深色主题的值是派生的，没有这道闸就只能靠人眼看。
@@ -13,7 +16,7 @@
  * 退出码 0 = 全绿；任何一条不过都会打印具体哪一条并以 1 退出。
  */
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, readdirSync, rmSync, statSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -103,6 +106,108 @@ check('法务邮箱两种语言一致且未被改动',
   DICTS.zh.footer.email === 'privacy@fizzchat.app' &&
   DICTS.en.footer.email === 'privacy@fizzchat.app');
 
+// ── ①b 文案语域：禁用口语词表 + 长度上限 + 事实红线 ──────────────────────────
+// 官网文案语域＝正式产品书面语（中文名词化、陈述句；英文母语产品写手口吻、sentence case）。
+// 用户 2026-09-03 / 09-06 三次点名「大白话、不专业」，所以把当时逐条剔除的表达固化成
+// 禁用词表：再次写回即红。改前改后逐句对照见
+// specs/reports/WEBSITE_COPY_REWRITE_2026-09-06.md。
+//
+// 扫描范围＝营销区块（首页 + UI 标签），privacy / terms 两页不在内 ——
+// 它们是法律文书，中文法律文体本来就用「您 / 请您」，套营销语域判它全是假阳。
+// 这与 specs/scripts/copy_register_lint.py 的 [E1-site] 口径一致（该脚本同日同步收敛）。
+console.log('\n[1b] 文案语域（禁用口语词表 / 长度 / 事实红线）');
+
+const MARKETING = (p) => !p.startsWith('privacy') && !p.startsWith('terms');
+const mkTexts = (lang) =>
+  keyPaths(DICTS[lang]).filter(MARKETING).map((p) => ({ p, v: String(readPath(DICTS[lang], p)) }));
+const zhMk = mkTexts('zh');
+const enMk = mkTexts('en');
+
+const BANNED_ZH_SITE = [
+  // ① 与 specs/scripts/copy_register_lint.py 的 ORAL_SITE_ZH 逐字同源（下方有一致性断言兜底）
+  '认得', '说过的话', '带去别处', '就这些', '靠邀请', '跑在', '各登各', '一起用', '进得来',
+  '这一步', '别人的', '自己的机器', '不做广告生意', '还在准备', '看看我们', '不复杂',
+  '搜到你', '做画像', '导成文件', '外面能打开',
+  // ② 本站补充：2026-09-06 重写时剔除、上表尚未覆盖的口语表达
+  '这儿', '别处', '的地方', '看看', '三件事', '四件事', '网盘', '广告生意',
+  '一个邀请', '暂时没做', '直接给出', '一起删', '拿你的',
+  // ③ 客套腔（copy_register_lint 的 POLITE_ZH 同源；法务两页不在扫描范围内）
+  '请您', '感谢您', '敬请', '谢谢您', '麻烦您', '耐心等待', '敬请期待',
+];
+const BANNED_EN_SITE = [
+  // 口语 / 随性表达（全部小写，按小写包含判定）
+  'whole idea', 'off the table', 'sit on machines', 'show up here', 'lives in',
+  'look you up', 'turns your history', 'not yet', 'gets said', 'runs on invites',
+  // en-GB 拼写：本站统一 en-US（i18n.md 判据 5 格式本地化）
+  'recognise', 'organise', 'colour',
+];
+
+const zhOral = BANNED_ZH_SITE.flatMap((w) =>
+  zhMk.filter((t) => t.v.includes(w)).map((t) => w + ' @ zh.' + t.p),
+);
+check('中文营销文案无禁用口语词', zhOral.length === 0, zhOral.slice(0, 6).join('; '));
+
+const enOral = BANNED_EN_SITE.flatMap((w) =>
+  enMk.filter((t) => t.v.toLowerCase().includes(w)).map((t) => w + ' @ en.' + t.p),
+);
+check('英文营销文案无禁用口语词 / 无 en-GB 拼写', enOral.length === 0, enOral.slice(0, 6).join('; '));
+
+// 词表单一真源自检：copy_register_lint.py 的 ORAL_SITE_ZH 必须被本表完全覆盖。
+// 那边加了词这边没跟 → 这里先红，避免两处门禁各走各的。
+const LINT_PY = resolve(ROOT, '..', 'specs', 'scripts', 'copy_register_lint.py');
+if (existsSync(LINT_PY)) {
+  const py = readFileSync(LINT_PY, 'utf8');
+  const seg = py.slice(py.indexOf('ORAL_SITE_ZH = ['));
+  const words = [...seg.slice(0, seg.indexOf(']')).matchAll(/'([^']+)'/g)].map((m) => m[1]);
+  const missing = words.filter((w) => !BANNED_ZH_SITE.includes(w));
+  check(`禁用词表与 copy_register_lint.py ORAL_SITE_ZH 同步（${words.length} 词）`,
+    words.length > 0 && missing.length === 0, '本表缺: ' + missing.join(', '));
+} else {
+  console.log('  skip 禁用词表同步自检 — 未找到 specs/scripts/copy_register_lint.py（独立 clone 场景）');
+}
+
+// 长度上限：中文标题 ≤12 字、副标题 ≤40 字、正文每条 ≤60 字（只数汉字，不数西文与标点）
+const cjkLen = (s) => (s.match(/[一-鿿]/g) || []).length;
+const idx3 = [0, 1, 2];
+const idx4 = [0, 1, 2, 3];
+const TITLE_PATHS = ['hero.title', 'values.title', 'promise.title', 'download.title']
+  .concat(idx3.map((i) => `values.items[${i}].title`))
+  .concat(idx4.map((i) => `promise.items[${i}].title`));
+const LEAD_PATHS = ['hero.lead', 'values.lead', 'promise.lead', 'download.lead'];
+const BODY_PATHS = idx3
+  .map((i) => `values.items[${i}].desc`)
+  .concat(idx4.map((i) => `promise.items[${i}].desc`))
+  .concat(['download.pendingHint']);
+
+for (const [label, paths, max] of [
+  ['标题 ≤12 字', TITLE_PATHS, 12],
+  ['副标题 ≤40 字', LEAD_PATHS, 40],
+  ['正文 ≤60 字', BODY_PATHS, 60],
+]) {
+  const over = paths
+    .map((p) => ({ p, n: cjkLen(String(readPath(DICTS.zh, p))) }))
+    .filter((x) => x.n > max);
+  check(`中文${label}`, over.length === 0, over.map((x) => `${x.p}=${x.n}`).join(', '));
+}
+
+// 事实红线：营销区块不得声称「端到端加密」——当前实现不是（specs/CLAUDE.md 硬约束 5 只承诺不外流）。
+// ⚠️ 隐私政策三·2 现仍有这句，属法务两页待拍板项，不在本门禁范围（见交付报告）。
+const e2eeHits = zhMk
+  .filter((t) => t.v.includes('端到端'))
+  .map((t) => 'zh.' + t.p)
+  .concat(enMk.filter((t) => /end-to-end/i.test(t.v)).map((t) => 'en.' + t.p));
+check('营销区块无「端到端加密」等实现支撑不住的说法', e2eeHits.length === 0, e2eeHits.join(', '));
+
+// 标点：状态/说明类文案不用感叹号（specs/copy-style.md §四 3）；英文用直撇号（glossary 撇号口径）
+const bangs = zhMk
+  .filter((t) => t.v.includes('！'))
+  .map((t) => 'zh.' + t.p)
+  .concat(enMk.filter((t) => t.v.includes('!')).map((t) => 'en.' + t.p));
+check('营销区块无感叹号', bangs.length === 0, bangs.join(', '));
+
+const curly = enMk.filter((t) => t.v.includes('’')).map((t) => 'en.' + t.p);
+check('英文营销区块用直撇号（glossary 撇号口径）', curly.length === 0, curly.join(', '));
+
 // ── ② 组件里引用的字典路径都存在 ───────────────────────────────────────────
 console.log('\n[2] 组件引用的字典路径');
 
@@ -182,7 +287,7 @@ const PAIRS = [
   ['w-ink-2', 'w-canvas', 4.5, '说明文字 在画布上'],
   ['w-ink-2', 'w-raised', 4.5, '说明文字 在交替分区上'],
   ['w-ink-2', 'w-surface', 4.5, '卡片正文'],
-  ['w-ink-2', 'w-surface-hover', 4.5, '「暂未开放」徽标文字'],
+  ['w-ink-2', 'w-surface-hover', 4.5, '「即将发布」徽标文字'],
   ['w-brand-text', 'w-canvas', 4.5, '链接/绿松石文字 在画布上'],
   ['w-brand-text', 'w-raised', 4.5, '链接 在交替分区上'],
   ['w-brand-text', 'w-surface', 4.5, '卡片内动作文字'],
