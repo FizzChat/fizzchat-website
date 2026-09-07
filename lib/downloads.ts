@@ -69,7 +69,7 @@ export const DOWNLOADS: Record<Platform, DownloadInfo> = {
     filename: 'FizzChat.apk',
     version: '1.0.0',
     sizeLabel: '152.4 MB',
-    sha256: 'e9325c16ded206d1e600775d96d33964c314725e84f601cf61d168b2319aa2bb',
+    sha256: '803fa7257c1e30dc0706effd11e9444326e0cf1ab0da030561f55c9af5d33c10',
   },
   ios: {
     platform: 'ios',
