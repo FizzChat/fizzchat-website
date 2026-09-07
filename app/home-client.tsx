@@ -11,12 +11,20 @@ import {
   MessageCircleOff,
   Monitor,
   MonitorSmartphone,
+  RefreshCw,
   Server,
+  ShieldCheck,
   Smartphone,
   UserRoundCheck,
   type LucideIcon,
 } from 'lucide-react';
-import { DOWNLOADS, PLATFORM_ORDER, isDownloadable, type DownloadInfo } from '@/lib/downloads';
+import {
+  ANDROID_SIGNING_SHA256_FINGERPRINT,
+  DOWNLOADS,
+  PLATFORM_ORDER,
+  isDownloadable,
+  type DownloadInfo,
+} from '@/lib/downloads';
 import type { Dict } from '@/lib/i18n';
 import { useSitePrefs } from './_components/prefs';
 import { SiteHeader } from './_components/site-header';
@@ -143,12 +151,85 @@ function DownloadCard({ info, dict }: { info: DownloadInfo; dict: Dict }) {
           <Download className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
           {dict.nav.download}
         </span>
-        {info.version && <span className="text-caption text-ink-2">{info.version}</span>}
+        {(info.version || info.sizeLabel) && (
+          <span className="text-caption text-ink-2">
+            {[info.version, info.sizeLabel].filter(Boolean).join(' · ')}
+          </span>
+        )}
       </div>
+      {info.sha256 && (
+        <p className="mt-2 break-all font-mono text-caption text-ink-2">SHA-256 {info.sha256}</p>
+      )}
       {external && (
         <p className="mt-2 text-caption text-ink-2">{dict.download.testflightHint}</p>
       )}
     </a>
+  );
+}
+
+/**
+ * Android 安装指引 + Play Protect 说明（T-P2-21）。
+ * 结构对标 Telegram 官方 APK 页 / Signal Android 页 / F-Droid 的既有惯例：
+ * 三步安装 → Play Protect 提示怎么办 → 核对签名/校验和 → 如何获取新版本。
+ * 复用页面已有的 rounded-card / IconTile 排版组件，不引入新的视觉语言。
+ * 常驻展示（不依赖 Android 卡片是否已可下载）：安装包上线前，这里先把流程讲清楚；
+ * 上线后 DownloadCard 会自动显示版本号/大小/SHA-256，两处内容天然对上。
+ */
+function AndroidInstallGuide({ dict }: { dict: Dict }) {
+  const a = dict.androidInstall;
+  return (
+    <div className="mt-10 border-t border-line pt-10">
+      <h3 className="text-title font-bold text-ink sm:text-d4">{a.title}</h3>
+      <p className="mt-2 max-w-prose text-body text-ink-2">{a.lead}</p>
+
+      <ol className="mt-6 grid list-none grid-cols-1 gap-4 md:grid-cols-3">
+        {a.steps.map((step, i) => (
+          <li key={step.title} className="rounded-card border border-line bg-surface p-4 sm:p-6">
+            <span
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-tint text-body font-semibold text-brand-text"
+              aria-hidden="true"
+            >
+              {i + 1}
+            </span>
+            <h4 className="mt-4 text-body font-semibold text-ink">{step.title}</h4>
+            <p className="mt-1 text-caption text-ink-2">{step.desc}</p>
+          </li>
+        ))}
+      </ol>
+
+      <div className="mt-4 rounded-card border border-line bg-surface p-4 sm:p-6">
+        <div className="flex items-start gap-3">
+          <IconTile icon={ShieldCheck} />
+          <div>
+            <h4 className="text-body font-semibold text-ink">{a.protectTitle}</h4>
+            {a.protectBody.map((p) => (
+              <p key={p} className="mt-2 text-caption text-ink-2">
+                {p}
+              </p>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="rounded-card border border-line bg-surface p-4 sm:p-6">
+          <h4 className="text-body font-semibold text-ink">{a.verifyTitle}</h4>
+          <p className="mt-2 text-caption text-ink-2">{a.verifyBody}</p>
+          {ANDROID_SIGNING_SHA256_FINGERPRINT && (
+            <p className="mt-2 break-all font-mono text-caption text-ink-2">
+              SHA-256 {ANDROID_SIGNING_SHA256_FINGERPRINT}
+            </p>
+          )}
+        </div>
+        <div className="rounded-card border border-line bg-surface p-4 sm:p-6">
+          <div className="flex items-center gap-2">
+            <RefreshCw className="h-4 w-4 text-brand-text" strokeWidth={2} aria-hidden="true" />
+            <h4 className="text-body font-semibold text-ink">{a.updateTitle}</h4>
+          </div>
+          <p className="mt-2 text-caption text-ink-2">{a.updateBody}</p>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -248,6 +329,7 @@ export default function HomeClient() {
                 {dict.download.pendingHint}
               </p>
             )}
+            <AndroidInstallGuide dict={dict} />
           </div>
         </section>
       </main>

@@ -81,6 +81,23 @@ export interface Dict {
     androidSub: string;
     iosSub: string;
   };
+  /**
+   * Android 安装指引 + Play Protect 说明（T-P2-21，2026-09-08）。
+   * 对标 Telegram 官方 APK 页 / Signal Android 页 / F-Droid 的结构：三步安装 →
+   * Play Protect 提示怎么办 → 核对签名/校验和 → 如何获取新版本。只在 Android 卡片下方
+   * 出现，不影响 Windows/iOS 卡片。
+   */
+  androidInstall: {
+    title: string;
+    lead: string;
+    steps: FeatureItem[];
+    protectTitle: string;
+    protectBody: string[];
+    verifyTitle: string;
+    verifyBody: string;
+    updateTitle: string;
+    updateBody: string;
+  };
   footer: {
     copyright: string;
     privacyLink: string;
@@ -167,6 +184,34 @@ export const DICTS: Record<Lang, Dict> = {
       windowsSub: 'Windows 10 / 11 · 64 位',
       androidSub: 'Android 8.0 及以上',
       iosSub: 'iPhone · iPad',
+    },
+    androidInstall: {
+      title: 'Android 安装说明',
+      lead: '气泡 Android 版通过本页直接分发，未上架应用商店，安装前请阅读以下步骤。',
+      steps: [
+        {
+          title: '下载安装包',
+          desc: '点击上方 Android 卡片下载安装包，文件名为 FizzChat.apk。',
+        },
+        {
+          title: '允许安装未知来源应用',
+          desc: '系统弹出权限提示时，为负责本次下载的浏览器或文件管理器开启安装未知应用的权限，仅需在首次安装时授权一次。',
+        },
+        {
+          title: '完成安装并登录',
+          desc: '安装完成后打开应用，使用已有账号登录，消息与设置会与其他客户端保持同步。',
+        },
+      ],
+      protectTitle: '出现 Google Play Protect 提示怎么办',
+      protectBody: [
+        '安装未上架 Google Play 商店的应用时，系统会弹出 Play Protect 提示，这是所有商店外来源安装包的通用提示，与安装包本身是否安全无关。',
+        '确认安装包来自本页后，在提示中选择继续安装即可；如需进一步核实，可在安装前核对签名证书指纹与本页公布的值是否一致。',
+      ],
+      verifyTitle: '核对签名与校验和',
+      verifyBody:
+        '签名证书指纹长期保持固定，见下方；可在系统的应用信息或第三方校验工具中核对，与该值一致后再安装。每个正式发布的安装包上线后，还会在本页同时公布版本号与 SHA-256 校验和。',
+      updateTitle: '获取新版本',
+      updateBody: '气泡会在应用内提示新版本；也可随时回到本页下载最新安装包，覆盖安装即可完成更新。',
     },
     footer: {
       copyright: '© 2026 FizzChat',
@@ -463,6 +508,35 @@ export const DICTS: Record<Lang, Dict> = {
       windowsSub: 'Windows 10 / 11 · 64-bit',
       androidSub: 'Android 8.0 and later',
       iosSub: 'iPhone · iPad',
+    },
+    androidInstall: {
+      title: 'Installing on Android',
+      lead: 'FizzChat for Android is distributed directly from this page, not through the Play Store. Read the steps below before you install.',
+      steps: [
+        {
+          title: 'Download the package',
+          desc: 'Get the installer from the Android card above. The file is named FizzChat.apk.',
+        },
+        {
+          title: 'Allow installs from this source',
+          desc: 'When prompted, allow your browser or file manager to install unknown apps. You only need to grant this once, the first time you install.',
+        },
+        {
+          title: 'Finish and sign in',
+          desc: 'Open the app once installation completes and sign in with your existing account. Messages and settings stay in sync with your other devices.',
+        },
+      ],
+      protectTitle: 'About the Google Play Protect warning',
+      protectBody: [
+        'Android shows a Play Protect warning for any app installed outside the Play Store. It appears for every installer from an outside source, not just this one, and does not mean the file is unsafe.',
+        'Once you have confirmed the file came from this page, choose to continue with the install. If you want to check further, compare the signing certificate fingerprint against the value published here before installing.',
+      ],
+      verifyTitle: 'Verify the signature and checksum',
+      verifyBody:
+        'The signing certificate fingerprint stays fixed and is published below. Check it against your device\'s app info screen or a checksum tool before you install. Once we publish a release, its version number and SHA-256 checksum will appear on this page too.',
+      updateTitle: 'Getting updates',
+      updateBody:
+        'FizzChat checks for new versions from inside the app. You can also come back to this page at any time and install the latest package over the current one.',
     },
     footer: {
       copyright: '© 2026 FizzChat',
