@@ -1,0 +1,25 @@
+FizzChat 品牌资产 —— 来源与授权
+================================
+
+本仓内的 LOGO / 应用图标 / favicon / 启动图标 / 分享图，全部是
+**FizzChat 自有品牌资产**，由 specs/brand 资产包分发而来，不是第三方素材。
+
+来源（唯一真源，各仓不许自己再画一版）
+  几何：openim-flutter-demo/openim_common/lib/src/ui/brand/fizz_brand_logo.dart
+        （L3「双泡·小圈子」，用户 2026-08-25 定案）
+  色值：specs/design/tokens.json（brand.teal600 / bg.page）
+  生成：specs/scripts/gen_brand_assets.py
+  资产包：specs/brand/（清单与 sha256 见 brand_assets.json，使用规则见 BRAND_KIT.md）
+  分发：python specs/scripts/gen_brand_assets.py --distribute
+
+授权
+  图形本身为 FizzChat 所有，版权保留；不含任何第三方图形素材。
+
+字标里用到的字体（仅用于把字形**转曲**成路径，产物不含字体二进制，
+可自由再分发）：
+  · latin Manrope-Bold.ttf             SIL OFL 1.1
+  · cjk   NotoSansSC-Bold.otf          SIL OFL 1.1
+
+⚠️ 本目录下的品牌图**禁止手改**：改动会被 brand_gate.py 的 sha 白名单判红。
+   要换 LOGO，改上面那条链条的头（几何 / token），再重新生成并分发。
+
