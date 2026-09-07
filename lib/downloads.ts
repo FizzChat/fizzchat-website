@@ -62,14 +62,14 @@ export const DOWNLOADS: Record<Platform, DownloadInfo> = {
     label: 'Android',
     // T-P2-21（2026-09-08）：真实签名 APK 已发布，见
     // specs/reports/OPS_applinks_apk_hosting_2026-09-08.md。url 指向版本号那份
-    // （downloads/fizzchat-3.8.3.apk，Cache-Control: public, max-age=31536000,
+    // （downloads/fizzchat-1.0.0.apk，Cache-Control: public, max-age=31536000,
     // immutable），不指向 fizzchat-latest.apk ——后者会被下次发布覆盖，指向它
     // 的话，用户点开下载链接时若正好撞上新版本发布会拿到错误内容。
-    url: 'https://minio.fizzchat.cc/downloads/fizzchat-3.8.3.apk',
+    url: 'https://minio.fizzchat.cc/downloads/fizzchat-1.0.0.apk',
     filename: 'FizzChat.apk',
-    version: '3.8.3',
-    sizeLabel: '216.8 MB',
-    sha256: 'a5e804a4dc96dc942244b82c264a9383f2378a72bd2cd848001067c5c90168e7',
+    version: '1.0.0',
+    sizeLabel: '152.4 MB',
+    sha256: 'e9325c16ded206d1e600775d96d33964c314725e84f601cf61d168b2319aa2bb',
   },
   ios: {
     platform: 'ios',
