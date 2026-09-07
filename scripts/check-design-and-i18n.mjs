@@ -102,9 +102,11 @@ check('三点价值两种语言都是 3 条',
   DICTS.zh.values.items.length === 3 && DICTS.en.values.items.length === 3);
 check('隐私承诺两种语言都是 4 条（对应 CLAUDE.md 硬约束 5）',
   DICTS.zh.promise.items.length === 4 && DICTS.en.promise.items.length === 4);
+// 邮箱域名 2026-09-08 随法务文本重写从 fizzchat.app 改到 fizzchat.cc（安卓包名 cc.fizzchat.app
+// 与线上域名都在 fizzchat.cc；.app 那个是从未启用的旧写法）。三端法务正文用的是同一个地址。
 check('法务邮箱两种语言一致且未被改动',
-  DICTS.zh.footer.email === 'privacy@fizzchat.app' &&
-  DICTS.en.footer.email === 'privacy@fizzchat.app');
+  DICTS.zh.footer.email === 'privacy@fizzchat.cc' &&
+  DICTS.en.footer.email === 'privacy@fizzchat.cc');
 
 // ── ①b 文案语域：禁用口语词表 + 长度上限 + 事实红线 ──────────────────────────
 // 官网文案语域＝正式产品书面语（中文名词化、陈述句；英文母语产品写手口吻、sentence case）。
@@ -191,7 +193,8 @@ for (const [label, paths, max] of [
 }
 
 // 事实红线：营销区块不得声称「端到端加密」——当前实现不是（specs/CLAUDE.md 硬约束 5 只承诺不外流）。
-// ⚠️ 隐私政策三·2 现仍有这句，属法务两页待拍板项，不在本门禁范围（见交付报告）。
+// 法务两页 2026-09-08 已按现行实现重写（T-P1-72），隐私政策五现在写的是「本应用未采用端到端加密」，
+// 这句是**否定陈述**，所以仍不能拿关键词一刀切扫进来；法务正文的事实红线由 chat 契约 PR-172 管。
 const e2eeHits = zhMk
   .filter((t) => t.v.includes('端到端'))
   .map((t) => 'zh.' + t.p)
