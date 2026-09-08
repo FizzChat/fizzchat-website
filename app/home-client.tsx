@@ -5,6 +5,7 @@ import {
   Apple,
   ArrowRight,
   Download,
+  ExternalLink,
   FileX,
   Link2Off,
   EyeOff,
@@ -20,6 +21,7 @@ import {
 } from 'lucide-react';
 import {
   ANDROID_SIGNING_SHA256_FINGERPRINT,
+  DESKTOP_WEBAPP_URL,
   DOWNLOADS,
   PLATFORM_ORDER,
   isDownloadable,
@@ -103,12 +105,10 @@ function FeatureCard({
 }
 
 function DownloadCard({ info, dict }: { info: DownloadInfo; dict: Dict }) {
+  // windows 走独立的 DesktopWebAppCard（见下方），这里只服务 android / ios 两张真实安装包卡。
   const Icon = PLATFORM_ICONS[info.platform];
-  const subLabel = {
-    windows: dict.download.windowsSub,
-    android: dict.download.androidSub,
-    ios: dict.download.iosSub,
-  }[info.platform];
+  const subLabel =
+    info.platform === 'android' ? dict.download.androidSub : dict.download.iosSub;
 
   const head = (
     <>
@@ -164,6 +164,41 @@ function DownloadCard({ info, dict }: { info: DownloadInfo; dict: Dict }) {
         <p className="mt-2 text-caption text-ink-2">{dict.download.testflightHint}</p>
       )}
     </a>
+  );
+}
+
+/**
+ * 桌面版卡片（Windows / macOS，T-P1-148）。没有原生安装包——桌面端是 PWA，
+ * 对标 Telegram Web / WhatsApp Web / Discord 官网下载页的「在浏览器中打开」入口：
+ * 卡片本身始终是可操作态（不套用 DownloadCard 的 pending 占位视觉），
+ * 两步说明 + 一个跳转网页版的主按钮，复用页面已有的 rounded-card / IconTile 视觉语言。
+ */
+function DesktopWebAppCard({ dict }: { dict: Dict }) {
+  const d = dict.download;
+  return (
+    <div className="flex flex-col rounded-card border border-line bg-surface p-4 sm:p-6">
+      <IconTile icon={Monitor} />
+      <div className="mt-4 text-title font-semibold text-ink">{d.desktopTitle}</div>
+      <ol className="mt-3 flex-1 list-none space-y-1.5">
+        {d.desktopSteps.map((step, i) => (
+          <li key={step} className="flex gap-2 text-caption text-ink-2">
+            <span aria-hidden="true" className="shrink-0 font-semibold text-brand-text">
+              {i + 1}.
+            </span>
+            <span>{step}</span>
+          </li>
+        ))}
+      </ol>
+      <a
+        href={DESKTOP_WEBAPP_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-4 inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-ctl bg-brand-solid text-body font-semibold text-on-brand transition-colors duration-150 hover:bg-brand-solid-hover active:bg-brand-solid-active focus-visible:shadow-focus"
+      >
+        <ExternalLink className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+        {d.desktopCta}
+      </a>
+    </div>
   );
 }
 
@@ -235,7 +270,9 @@ function AndroidInstallGuide({ dict }: { dict: Dict }) {
 
 export default function HomeClient() {
   const { dict } = useSitePrefs();
-  const anyPending = PLATFORM_ORDER.some((p) => !isDownloadable(DOWNLOADS[p]));
+  // windows 不再是「等待中的安装包」，它是始终可操作的桌面网页版卡片（DesktopWebAppCard），
+  // 不计入「还有安装包在准备中」的提示判断。
+  const anyPending = PLATFORM_ORDER.some((p) => p !== 'windows' && !isDownloadable(DOWNLOADS[p]));
 
   return (
     <>
@@ -320,9 +357,13 @@ export default function HomeClient() {
           <div className="mx-auto max-w-site px-4 py-12 sm:px-6 sm:py-16">
             <SectionHeading title={dict.download.title} lead={dict.download.lead} />
             <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
-              {PLATFORM_ORDER.map((platform) => (
-                <DownloadCard key={platform} info={DOWNLOADS[platform]} dict={dict} />
-              ))}
+              {PLATFORM_ORDER.map((platform) =>
+                platform === 'windows' ? (
+                  <DesktopWebAppCard key={platform} dict={dict} />
+                ) : (
+                  <DownloadCard key={platform} info={DOWNLOADS[platform]} dict={dict} />
+                ),
+              )}
             </div>
             {anyPending && (
               <p className="mt-4 max-w-prose text-body text-ink-2">

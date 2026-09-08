@@ -14,6 +14,15 @@ const RELEASE_FINGERPRINTS = assetlinks[0]?.target?.sha256_cert_fingerprints ?? 
 export const ANDROID_SIGNING_SHA256_FINGERPRINT: string | null =
   RELEASE_FINGERPRINTS[RELEASE_FINGERPRINTS.length - 1] ?? null;
 
+/**
+ * 桌面版 Web 应用地址（T-P1-148，2026-09-08，主控裁定：上线不做 Windows/macOS 安装包，
+ * 桌面端＝PWA 安装，对标 Telegram Web / WhatsApp Web / Discord 官网下载页的
+ * 「在浏览器中打开」入口）。下载区的桌面卡片不走 DownloadInfo/isDownloadable 那一套
+ * （它是「有没有安装包」的状态机，桌面版从设计上就没有安装包），改由
+ * `app/home-client.tsx` 的 `DesktopWebAppCard` 直接引用这个常量渲染成始终可操作的卡片。
+ */
+export const DESKTOP_WEBAPP_URL = 'https://app.fizzchat.cc';
+
 export interface DownloadInfo {
   platform: Platform;
   /** 平台名是专有名词，两种语言都不翻译，所以不进 i18n 字典 */
@@ -51,6 +60,11 @@ export const DOWNLOADS: Record<Platform, DownloadInfo> = {
   windows: {
     platform: 'windows',
     label: 'Windows',
+    // 2026-09-08（T-P1-148）：桌面端不做原生安装包，这条记录不再驱动任何可见卡片——
+    // `app/home-client.tsx` 渲染 `windows` 这一格时用的是 `DesktopWebAppCard`
+    // （指向 DESKTOP_WEBAPP_URL 的网页版入口），不读这里的 url/filename。
+    // 字段原样保留只是让 `Record<Platform, DownloadInfo>` 保持完整，未来若真要发布
+    // 原生安装包，把 url/version/sizeLabel/sha256 填上即可，不需要改渲染逻辑本身。
     url: null,
     filename: 'FizzChat-Setup.exe',
     version: null,

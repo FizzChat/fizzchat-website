@@ -77,7 +77,14 @@ export interface Dict {
     pendingLabel: string;
     pendingHint: string;
     testflightHint: string;
-    windowsSub: string;
+    /**
+     * 桌面版卡片（T-P1-148，2026-09-08）：不做 Windows/macOS 安装包，桌面端 = PWA。
+     * 对标 Telegram Web / WhatsApp Web / Discord 官网下载页的「在浏览器中打开」入口——
+     * 卡片始终是可操作态（不套用 pending 占位卡的视觉），文案见 lib/downloads.ts 注释。
+     */
+    desktopTitle: string;
+    desktopSteps: string[];
+    desktopCta: string;
     androidSub: string;
     iosSub: string;
   };
@@ -181,13 +188,18 @@ export const DICTS: Record<Lang, Dict> = {
       pendingLabel: '即将发布',
       pendingHint: '安装包正在准备中，发布后将在此提供下载地址。',
       testflightHint: '通过 TestFlight 安装',
-      windowsSub: 'Windows 10 / 11 · 64 位',
+      desktopTitle: '桌面版（Windows / macOS）',
+      desktopSteps: [
+        '用 Chrome 或 Edge 打开 app.fizzchat.cc。',
+        '点击地址栏右侧的安装图标，安装后即可像普通应用一样从桌面或开始菜单打开。',
+      ],
+      desktopCta: '打开网页版',
       androidSub: 'Android 8.0 及以上',
       iosSub: 'iPhone · iPad',
     },
     androidInstall: {
       title: 'Android 安装说明',
-      lead: '气泡 Android 版通过本页直接分发，未上架应用商店，安装前请阅读以下步骤。',
+      lead: '气泡 Android 版由本页直接提供安装包，安装前请阅读以下步骤。',
       steps: [
         {
           title: '下载安装包',
@@ -204,8 +216,8 @@ export const DICTS: Record<Lang, Dict> = {
       ],
       protectTitle: '出现 Google Play Protect 提示怎么办',
       protectBody: [
-        '安装未上架 Google Play 商店的应用时，系统会弹出 Play Protect 提示，这是所有商店外来源安装包的通用提示，与安装包本身是否安全无关。',
-        '确认安装包来自本页后，在提示中选择继续安装即可；如需进一步核实，可在安装前核对签名证书指纹与本页公布的值是否一致。',
+        '安装过程中若出现 Play Protect 提示，点“仍要安装”即可继续，这是系统对直接下载安装包的通用提示，与安装包本身是否安全无关。',
+        '如需进一步核实，可在安装前核对签名证书指纹与本页公布的值是否一致。',
       ],
       verifyTitle: '核对签名与校验和',
       verifyBody:
@@ -302,7 +314,7 @@ export const DICTS: Record<Lang, Dict> = {
         {
           title: '七、未成年人保护',
           body: [
-            '本应用不面向 13 周岁以下的儿童提供服务。',
+            '本应用不面向 13 周岁以下的儿童提供服务；若您所在地法律规定了更高的最低年龄（例如 14 或 16 周岁），则以该年龄为准。',
             '若您未满 18 周岁，请在监护人的同意与指导下使用本应用并提交个人信息。',
             '若我们发现在未取得监护人同意的情况下收集了未成年人的个人信息，将尽快删除相关数据。',
           ],
@@ -412,8 +424,8 @@ export const DICTS: Record<Lang, Dict> = {
         {
           title: '八、法律适用与争议解决',
           body: [
-            '本条款的订立、效力、解释、履行及争议解决，适用本应用运营方注册地的法律，但不包括其冲突法规则。',
-            '因本条款引起或与之相关的争议，双方应首先友好协商解决；协商不成的，任何一方均可提交本应用运营方注册地有管辖权的法院裁判。',
+            '本条款的订立、效力、解释、履行及争议解决，适用您所在地的法律；您所在地法律中的强制性规定不受本条款影响。',
+            '因本条款引起或与之相关的争议，双方应首先友好协商解决；协商不成的，任何一方均可向您所在地有管辖权的法院提起诉讼。',
             '本条款任一条款被认定无效或不可执行的，不影响其余条款的效力。',
           ],
         },
@@ -505,13 +517,18 @@ export const DICTS: Record<Lang, Dict> = {
       pendingLabel: 'Coming soon',
       pendingHint: 'Builds are in preparation. Download links will appear here once they are released.',
       testflightHint: 'Install through TestFlight',
-      windowsSub: 'Windows 10 / 11 · 64-bit',
+      desktopTitle: 'Desktop (Windows / macOS)',
+      desktopSteps: [
+        'Open app.fizzchat.cc in Chrome or Edge.',
+        'Click the install icon in the address bar. Once installed, launch FizzChat from your desktop or Start menu like any other app.',
+      ],
+      desktopCta: 'Open the web app',
       androidSub: 'Android 8.0 and later',
       iosSub: 'iPhone · iPad',
     },
     androidInstall: {
       title: 'Installing on Android',
-      lead: 'FizzChat for Android is distributed directly from this page, not through the Play Store. Read the steps below before you install.',
+      lead: 'The FizzChat Android app installs directly from this page. Read the steps below before you install.',
       steps: [
         {
           title: 'Download the package',
@@ -528,8 +545,8 @@ export const DICTS: Record<Lang, Dict> = {
       ],
       protectTitle: 'About the Google Play Protect warning',
       protectBody: [
-        'Android shows a Play Protect warning for any app installed outside the Play Store. It appears for every installer from an outside source, not just this one, and does not mean the file is unsafe.',
-        'Once you have confirmed the file came from this page, choose to continue with the install. If you want to check further, compare the signing certificate fingerprint against the value published here before installing.',
+        'If Android shows a Play Protect warning during installation, choose to install anyway. This is the standard prompt for any app installed directly from a downloaded file, and it does not mean the file is unsafe.',
+        'To check further, compare the signing certificate fingerprint against the value published here before you install.',
       ],
       verifyTitle: 'Verify the signature and checksum',
       verifyBody:
@@ -627,7 +644,7 @@ export const DICTS: Record<Lang, Dict> = {
         {
           title: '7. Children',
           body: [
-            'FizzChat is not directed to children under 13.',
+            'FizzChat is not directed to children under 13, or under the higher minimum age that applies where you live (for example 14 or 16 in some regions).',
             'If you are under 18, use the app and provide your information only with the consent and guidance of a parent or guardian.',
             'If we learn that we have collected a minor\'s information without that consent, we will delete it promptly.',
           ],
@@ -737,8 +754,8 @@ export const DICTS: Record<Lang, Dict> = {
         {
           title: '8. Governing law and disputes',
           body: [
-            'These Terms are governed by the law of the place where the operator of FizzChat is registered, excluding its conflict-of-laws rules.',
-            'Any dispute arising out of or relating to these Terms should first be settled through good-faith discussion. Failing that, either party may bring the dispute before a competent court in the place where the operator is registered.',
+            'These Terms are governed by the laws of the place where you live. Nothing in these Terms limits any rights you have under the mandatory laws of that place.',
+            'Any dispute arising out of or relating to these Terms should first be settled through good-faith discussion. Failing that, either party may bring the dispute before a competent court in the place where you live.',
             'If any provision of these Terms is held invalid or unenforceable, the remaining provisions stay in force.',
           ],
         },
