@@ -186,7 +186,7 @@ export const DICTS: Record<Lang, Dict> = {
       title: '下载气泡',
       lead: '同一账号可在全部客户端登录。',
       pendingLabel: '即将发布',
-      pendingHint: '安装包正在准备中，发布后将在此提供下载地址。',
+      pendingHint: 'iOS 版正在准备中，发布后将在此提供下载地址。',
       testflightHint: '通过 TestFlight 安装',
       desktopTitle: '桌面版（Windows / macOS）',
       desktopSteps: [
@@ -515,7 +515,7 @@ export const DICTS: Record<Lang, Dict> = {
       title: 'Download FizzChat',
       lead: 'The same account works on every platform.',
       pendingLabel: 'Coming soon',
-      pendingHint: 'Builds are in preparation. Download links will appear here once they are released.',
+      pendingHint: 'The iOS app is in preparation. Its download link will appear here once it is released.',
       testflightHint: 'Install through TestFlight',
       desktopTitle: 'Desktop (Windows / macOS)',
       desktopSteps: [
