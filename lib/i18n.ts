@@ -235,7 +235,7 @@ export const DICTS: Record<Lang, Dict> = {
     privacy: {
       title: '隐私政策',
       updatedLabel: '最后更新',
-      updatedDate: '2026 年 9 月 20 日',
+      updatedDate: '2026 年 9 月 23 日',
       intro:
         'FizzChat（中文名「气泡」，以下简称“本应用”或“我们”）是一款采用邀请制的即时通讯产品。本隐私政策说明我们收集哪些信息、如何使用与存储这些信息、在何种情形下与第三方共享，以及您对自己的信息享有哪些权利。请在使用本应用前完整阅读本政策。',
       backHome: '返回首页',
@@ -279,7 +279,7 @@ export const DICTS: Record<Lang, Dict> = {
         {
           title: '四、信息共享与披露',
           body: [
-            '我们不出售、出租或交易您的个人信息，仅在下列情形下共享必要信息。',
+            '我们不出售、出租或交易您的个人信息。仅在下列情形下共享必要信息：',
             '消息推送：安卓端通过 Google Firebase 云消息服务（FCM）下发通知，浏览器与 PWA 端通过浏览器厂商提供的 Web Push 服务下发通知。通知可能包含发件人昵称与消息摘要，您可在系统设置中关闭通知权限。',
             '网络接入：本应用的公网接入经由 Cloudflare 提供的网络传输服务中转，该服务仅用于网络层传输与接入防护。',
             '实时音视频：通话媒体由我们自行部署的 LiveKit 服务承载，不经第三方音视频云平台。',
@@ -312,16 +312,13 @@ export const DICTS: Record<Lang, Dict> = {
         {
           title: '七、未成年人保护',
           body: [
-            '本应用不面向 13 周岁以下的儿童提供服务；若您所在地法律规定了更高的最低年龄（例如 14 或 16 周岁），则以该年龄为准。',
-            '若您未满 18 周岁，请在监护人的同意与指导下使用本应用并提交个人信息。',
-            '若我们发现在未取得监护人同意的情况下收集了未成年人的个人信息，将尽快删除相关数据。',
+            '本应用不面向 13 周岁以下的儿童提供服务；若您所在地法律规定了更高的最低年龄（例如 14 或 16 周岁），则以该年龄为准。若您未满 18 周岁，请在监护人的同意与指导下使用本应用并提交个人信息。若我们发现在未取得监护人同意的情况下收集了未成年人的个人信息，将尽快删除相关数据。',
           ],
         },
         {
           title: '八、政策更新',
           body: [
-            '我们可能因业务调整或适用法律法规变化而更新本政策。更新后的版本将在本页发布，并同步修改生效日期。',
-            '涉及您权利的重大变更，我们将通过应用内通知等显著方式提前告知。',
+            '我们可能因业务调整或适用法律法规变化而更新本政策。更新后的版本将在本页发布，并同步修改生效日期。涉及您权利的重大变更，我们将通过应用内通知等显著方式提前告知。',
           ],
         },
         {
@@ -337,7 +334,7 @@ export const DICTS: Record<Lang, Dict> = {
     terms: {
       title: '服务条款',
       updatedLabel: '最后更新',
-      updatedDate: '2026 年 9 月 20 日',
+      updatedDate: '2026 年 9 月 23 日',
       intro:
         '欢迎使用 FizzChat（中文名「气泡」，以下简称“本应用”或“我们”）。本服务条款（以下简称“本条款”）构成您与本应用运营方之间就使用本应用达成的协议。当您注册账号、登录或以任何方式使用本应用时，即表示您已阅读、理解并同意本条款及《隐私政策》的全部内容。如您不同意其中任何内容，请停止使用本应用。',
       backHome: '返回首页',
@@ -345,8 +342,7 @@ export const DICTS: Record<Lang, Dict> = {
         {
           title: '一、服务说明',
           body: [
-            '本应用提供邀请制的即时通讯服务，包括单聊与群聊、动态、音视频通话，以及充值、红包、转账与提现等钱包功能。',
-            '本应用面向熟人之间的私密沟通，不提供向应用之外分享、转存或生成外链的功能。',
+            '本应用提供邀请制的即时通讯服务，包括单聊与群聊、动态、音视频通话，以及充值、红包、转账与提现等钱包功能。本应用面向熟人之间的私密沟通，不提供向应用之外分享、转存或生成外链的功能。',
           ],
         },
         {
@@ -394,7 +390,7 @@ export const DICTS: Record<Lang, Dict> = {
             '余额：账户余额因充值、转账、红包收发、提现等操作而变动，可用的资金功能以应用内实际提供的为准。账户余额不计付利息。',
             '红包：红包发出后，金额与份数即行锁定，由系统按随机规则预先拆分，领取先到先得，领取结果不可更改。超过公示时限未被领取的部分，将按规则退回发送方账户。',
             '转账：转账为账号之间的一对一资金转移，一经转出不可单方撤回。',
-            '充值：您可通过应用内提供的方式为账户充值。充值时应按应用内的指引选择资产与网络，并将资产转入页面显示的收款地址。若实际转入的网络或资产与您所选的不一致，相关资产可能无法找回。充值申请须经审核；到账金额按审核时的行情折算为您账户余额所用的计价单位，以实际入账为准。',
+            '充值：您可通过应用内提供的方式为账户充值。充值时应按应用内的指引选择资产与网络，并将资产转入页面显示的收款地址。若实际转入的网络或资产与您所选的不一致，相关资产可能无法找回。 充值申请须经审核；到账金额按审核时的行情折算为您账户余额所用的计价单位，以实际入账为准。',
             '提现：您需提交并保存有效的数字资产收款地址，并确认其所属网络无误；地址或网络填写有误可能导致资产无法找回。提现申请须经审核。提现金额应达到应用内公示的起提额度，按公示费率收取手续费。审核通过后，款项将发送至您提交的收款地址，到账时间以实际处理为准。',
             '实时参数：红包单笔上限、单次份数上限、红包有效期、可充值的资产与网络、单笔充值上下限、起提额度与提现费率等参数以应用内公示为准，我们可能根据风控与运营需要调整并公示。',
             '风控：对于涉嫌洗钱、诈骗、赌博、套现或异常刷量的账户，我们有权暂停其资金功能、冻结相关款项，并保留追究法律责任的权利。',
@@ -431,8 +427,7 @@ export const DICTS: Record<Lang, Dict> = {
         {
           title: '九、条款更新',
           body: [
-            '我们可能因业务调整或适用法律法规变化而更新本条款。更新后的版本将在本页发布，并同步修改生效日期。',
-            '重大变更将通过应用内通知等显著方式提前告知。更新生效后您继续使用本应用的，视为接受更新后的条款。',
+            '我们可能因业务调整或适用法律法规变化而更新本条款。更新后的版本将在本页发布，并同步修改生效日期。重大变更将通过应用内通知等显著方式提前告知。更新生效后您继续使用本应用的，视为接受更新后的条款。',
           ],
         },
         {
@@ -564,7 +559,7 @@ export const DICTS: Record<Lang, Dict> = {
     privacy: {
       title: 'Privacy Policy',
       updatedLabel: 'Last updated',
-      updatedDate: 'September 20, 2026',
+      updatedDate: 'September 23, 2026',
       intro:
         'FizzChat is an invitation-only messaging service. This Privacy Policy explains what information we collect, how we use and store it, when we disclose it, and what control you have over it. Please read it in full before you use the app.',
       backHome: 'Back to home',
@@ -608,9 +603,9 @@ export const DICTS: Record<Lang, Dict> = {
         {
           title: '4. When we share information',
           body: [
-            'We do not sell, rent, or trade your personal information. We share only what is necessary, and only in these circumstances.',
-            'Push notifications. On Android, notifications are delivered through Google Firebase Cloud Messaging (FCM); in browsers and PWAs, through the Web Push service operated by your browser vendor. A notification may include the sender\'s name and a preview of the message. You can turn notifications off in your system settings.',
-            'Network access. Traffic between your device and our servers is routed through Cloudflare\'s network transport service, which handles transport and access protection only.',
+            'We do not sell, rent, or trade your personal information. We share only what is necessary, and only in these circumstances:',
+            "Push notifications. On Android, notifications are delivered through Google Firebase Cloud Messaging (FCM); in browsers and PWAs, through the Web Push service operated by your browser vendor. A notification may include the sender's name and a preview of the message. You can turn notifications off in your system settings.",
+            "Network access. Traffic between your device and our servers is routed through Cloudflare's network transport service, which handles transport and access protection only.",
             'Voice and video. Call media is carried by our own LiveKit deployment. It is not routed through a third-party calling platform.',
             'Deposit and withdrawal review. The deposit requests you submit and the withdrawal addresses you save are used only to review and settle those requests, and are visible only to authorized staff on a need-to-know basis.',
             'Legal requests. We may disclose information where applicable law requires it, or where an authority requests it through due legal process.',
@@ -641,16 +636,13 @@ export const DICTS: Record<Lang, Dict> = {
         {
           title: '7. Children',
           body: [
-            'FizzChat is not directed to children under 13, or under the higher minimum age that applies where you live (for example 14 or 16 in some regions).',
-            'If you are under 18, use the app and provide your information only with the consent and guidance of a parent or guardian.',
-            'If we learn that we have collected a minor\'s information without that consent, we will delete it promptly.',
+            "FizzChat is not directed to children under 13, or under the higher minimum age that applies where you live (for example 14 or 16 in some regions). If you are under 18, use the app and provide your information only with the consent and guidance of a parent or guardian. If we learn that we have collected a minor's information without that consent, we will delete it promptly.",
           ],
         },
         {
           title: '8. Changes to this policy',
           body: [
-            'We may update this policy as the service changes or as the law requires. The current version is always published on this page, with the effective date updated.',
-            'Where a change materially affects your rights, we will tell you in advance through an in-app notice or another prominent means.',
+            'We may update this policy as the service changes or as the law requires. The current version is always published on this page, with the effective date updated. Where a change materially affects your rights, we will tell you in advance through an in-app notice or another prominent means.',
           ],
         },
         {
@@ -666,16 +658,15 @@ export const DICTS: Record<Lang, Dict> = {
     terms: {
       title: 'Terms of Service',
       updatedLabel: 'Last updated',
-      updatedDate: 'September 20, 2026',
+      updatedDate: 'September 23, 2026',
       intro:
-        'Welcome to FizzChat. These Terms of Service (the “Terms”) form the agreement between you and the operator of FizzChat (“we”, “us”) governing your use of the app. By registering an account, signing in, or otherwise using FizzChat, you confirm that you have read, understood, and accepted these Terms and our Privacy Policy. If you do not accept them, please stop using the app.',
+        'Welcome to FizzChat. These Terms of Service (“Terms”) form the agreement between you and the operator of FizzChat (“we”, “us”) governing your use of the app. By registering an account, signing in, or otherwise using FizzChat, you confirm that you have read, understood, and accepted these Terms and our Privacy Policy. If you do not accept them, please stop using the app.',
       backHome: 'Back to home',
       sections: [
         {
           title: '1. The service',
           body: [
-            'FizzChat is an invitation-only messaging service offering one-to-one and group chats, Moments, voice and video calls, and wallet features including deposits, red packets, transfers, and withdrawals.',
-            'It is built for private conversation between people who already know each other, and it deliberately offers no way to share content outside the app, save it elsewhere, or publish it to a public link.',
+            'FizzChat is an invitation-only messaging service offering one-to-one and group chats, Moments, voice and video calls, and wallet features including deposits, red packets, transfers, and withdrawals. It is built for private conversation between people who already know each other, and it deliberately offers no way to share content outside the app, save it elsewhere, or publish it to a public link.',
           ],
         },
         {
@@ -701,11 +692,11 @@ export const DICTS: Record<Lang, Dict> = {
             'publish fraudulent material, pyramid schemes, gambling, drug dealing, illegal fundraising, or comparable unlawful information;',
             'harass, abuse, attack, threaten, stalk, or otherwise subject anyone to online abuse;',
             'send spam, advertising, or unsolicited bulk messages;',
-            'infringe anyone\'s intellectual property, image rights, reputation, privacy, or other lawful interests;',
+            "infringe anyone's intellectual property, image rights, reputation, privacy, or other lawful interests;",
             'impersonate anyone, including our staff, official accounts, or other users;',
             'use red packets, transfers, or any other wallet feature for money laundering, fraud, gambling, cashing out, or other unlawful financial activity;',
             'access, scrape, or operate the app through bots, crawlers, or modified clients, or reverse engineer, decompile, or crack it;',
-            'work around the app\'s product limits in order to move another person\'s messages or Moments outside FizzChat.',
+            "work around the app's product limits in order to move another person's messages or Moments outside FizzChat.",
           ],
         },
         {
@@ -721,13 +712,13 @@ export const DICTS: Record<Lang, Dict> = {
           title: '5. Wallet, red packets, and transfers',
           body: [
             'Balance. Your balance changes as you deposit, send and receive transfers and red packets, and withdraw. The wallet features available to you are those offered in the app at the time. Balances do not earn interest.',
-            'Red packets. Once a red packet is sent, its total amount and the number of shares are fixed. The system splits it into random shares in advance, and shares are claimed first come, first served. Claims are final. Any share left unclaimed when the red packet expires is returned to the sender\'s balance.',
+            "Red packets. Once a red packet is sent, its total amount and the number of shares are fixed. The system splits it into random shares in advance, and shares are claimed first come, first served. Claims are final. Any share left unclaimed when the red packet expires is returned to the sender's balance.",
             'Transfers. A transfer moves funds from one account to another. Once sent, it cannot be reversed unilaterally.',
             'Deposits. You can add funds to your account using the methods offered in the app. Follow the prompts to pick the asset and the network, then send the asset to the address shown. If the network or the asset you send differs from the one you picked, those funds may be impossible to recover. Every deposit request is reviewed; the amount added to your balance is converted at the rate applying when the request is reviewed, and the amount actually credited governs.',
             'Withdrawals. You must save a valid digital-asset address and confirm that its network is correct. An incorrect address or network may make the funds impossible to recover. Every withdrawal request is reviewed. The amount must meet the published minimum and a fee is charged at the published rate. Once approved, the funds are sent to the address you supplied. Arrival times depend on processing.',
             'Published parameters. The maximum amount and number of shares per red packet, the red packet expiry period, the assets and networks available for deposits, the per-deposit limits, the minimum withdrawal, and the withdrawal fee rate are all published in the app. We may adjust them for risk-control or operational reasons and will publish any change.',
             'Risk control. Where an account is suspected of money laundering, fraud, gambling, cashing out, or artificially inflated activity, we may suspend its wallet features, hold the funds involved, and pursue legal remedies.',
-            'FizzChat\'s wallet features are not a savings, investment, credit, or payment settlement service.',
+            "FizzChat's wallet features are not a savings, investment, credit, or payment settlement service.",
           ],
         },
         {
@@ -760,8 +751,7 @@ export const DICTS: Record<Lang, Dict> = {
         {
           title: '9. Changes to these Terms',
           body: [
-            'We may update these Terms as the service changes or as the law requires. The current version is always published on this page, with the effective date updated.',
-            'We will give advance notice of material changes through an in-app notice or another prominent means. Continuing to use FizzChat after an update takes effect means you accept the updated Terms.',
+            'We may update these Terms as the service changes or as the law requires. The current version is always published on this page, with the effective date updated. We will give advance notice of material changes through an in-app notice or another prominent means. Continuing to use FizzChat after an update takes effect means you accept the updated Terms.',
           ],
         },
         {
