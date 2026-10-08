@@ -23,6 +23,7 @@ import {
   ANDROID_SIGNING_SHA256_FINGERPRINT,
   DESKTOP_WEBAPP_URL,
   DOWNLOADS,
+  IOS_WEBAPP_URL,
   PLATFORM_ORDER,
   isDownloadable,
   type DownloadInfo,
@@ -105,10 +106,9 @@ function FeatureCard({
 }
 
 function DownloadCard({ info, dict }: { info: DownloadInfo; dict: Dict }) {
-  // windows 走独立的 DesktopWebAppCard（见下方），这里只服务 android / ios 两张真实安装包卡。
+  // windows / ios 走独立的网页版卡片（DesktopWebAppCard / IosWebAppCard），这里只服务 android 安装包卡。
   const Icon = PLATFORM_ICONS[info.platform];
-  const subLabel =
-    info.platform === 'android' ? dict.download.androidSub : dict.download.iosSub;
+  const subLabel = dict.download.androidSub;
 
   const head = (
     <>
@@ -135,14 +135,10 @@ function DownloadCard({ info, dict }: { info: DownloadInfo; dict: Dict }) {
     );
   }
 
-  const external = Boolean(info.testflight);
-
   return (
     <a
       href={info.url ?? undefined}
       download={info.filename ?? undefined}
-      target={external ? '_blank' : undefined}
-      rel={external ? 'noopener noreferrer' : undefined}
       className="rounded-card border border-line bg-surface p-4 transition-colors duration-150 hover:border-brand hover:bg-surface-hover focus-visible:shadow-focus sm:p-6"
     >
       {head}
@@ -159,9 +155,6 @@ function DownloadCard({ info, dict }: { info: DownloadInfo; dict: Dict }) {
       </div>
       {info.sha256 && (
         <p className="mt-2 break-all font-mono text-caption text-ink-2">SHA-256 {info.sha256}</p>
-      )}
-      {external && (
-        <p className="mt-2 text-caption text-ink-2">{dict.download.testflightHint}</p>
       )}
     </a>
   );
@@ -198,6 +191,83 @@ function DesktopWebAppCard({ dict }: { dict: Dict }) {
         <ExternalLink className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
         {d.desktopCta}
       </a>
+    </div>
+  );
+}
+
+/**
+ * iOS 卡片（T-P1-166）。iOS 端是 PWA：卡片给出三步简版引导，主按钮在新标签页打开登录页，
+ * 完整说明见下方 IosInstallGuide。结构与 DesktopWebAppCard 一致（对标 Telegram Web /
+ * WhatsApp Web 官网的「在浏览器中打开」入口），不引入新的视觉语言。
+ */
+function IosWebAppCard({ dict }: { dict: Dict }) {
+  const d = dict.download;
+  return (
+    <div className="flex flex-col rounded-card border border-line bg-surface p-4 sm:p-6">
+      <IconTile icon={PLATFORM_ICONS.ios} />
+      <div className="mt-4">
+        <div className="text-title font-semibold text-ink">{DOWNLOADS.ios.label}</div>
+        <div className="mt-1 text-sub text-ink-2">{d.iosSub}</div>
+      </div>
+      <ol className="mt-3 flex-1 list-none space-y-1.5">
+        {d.iosSteps.map((step, i) => (
+          <li key={step} className="flex gap-2 text-caption text-ink-2">
+            <span aria-hidden="true" className="shrink-0 font-semibold text-brand-text">
+              {i + 1}.
+            </span>
+            <span>{step}</span>
+          </li>
+        ))}
+      </ol>
+      <a
+        href={IOS_WEBAPP_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="mt-4 inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-ctl bg-brand-solid text-body font-semibold text-on-brand transition-colors duration-150 hover:bg-brand-solid-hover active:bg-brand-solid-active focus-visible:shadow-focus"
+      >
+        <ExternalLink className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
+        {d.iosCta}
+      </a>
+    </div>
+  );
+}
+
+/**
+ * iPhone / iPad 添加到主屏幕引导（T-P1-166）。步骤依据 Apple 官方支持文档
+ * 「Turn a website into an app in Safari on iPhone / iPad」。布局沿用 AndroidInstallGuide。
+ */
+function IosInstallGuide({ dict }: { dict: Dict }) {
+  const g = dict.iosInstall;
+  return (
+    <div id="ios-install" className="mt-10 border-t border-line pt-10">
+      <h3 className="text-title font-bold text-ink sm:text-d4">{g.title}</h3>
+      <p className="mt-2 max-w-prose text-body text-ink-2">{g.lead}</p>
+
+      <ol className="mt-6 grid list-none grid-cols-1 gap-4 md:grid-cols-3">
+        {g.steps.map((step, i) => (
+          <li key={step.title} className="rounded-card border border-line bg-surface p-4 sm:p-6">
+            <span
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-tint text-body font-semibold text-brand-text"
+              aria-hidden="true"
+            >
+              {i + 1}
+            </span>
+            <h4 className="mt-4 text-body font-semibold text-ink">{step.title}</h4>
+            <p className="mt-1 text-caption text-ink-2">{step.desc}</p>
+          </li>
+        ))}
+      </ol>
+
+      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="rounded-card border border-line bg-surface p-4 sm:p-6">
+          <h4 className="text-body font-semibold text-ink">{g.webAppTitle}</h4>
+          <p className="mt-2 text-caption text-ink-2">{g.webAppBody}</p>
+        </div>
+        <div className="rounded-card border border-line bg-surface p-4 sm:p-6">
+          <h4 className="text-body font-semibold text-ink">{g.fallbackTitle}</h4>
+          <p className="mt-2 text-caption text-ink-2">{g.fallbackBody}</p>
+        </div>
+      </div>
     </div>
   );
 }
@@ -270,9 +340,6 @@ function AndroidInstallGuide({ dict }: { dict: Dict }) {
 
 export default function HomeClient() {
   const { dict } = useSitePrefs();
-  // windows 不再是「等待中的安装包」，它是始终可操作的桌面网页版卡片（DesktopWebAppCard），
-  // 不计入「还有安装包在准备中」的提示判断。
-  const anyPending = PLATFORM_ORDER.some((p) => p !== 'windows' && !isDownloadable(DOWNLOADS[p]));
 
   return (
     <>
@@ -360,17 +427,15 @@ export default function HomeClient() {
               {PLATFORM_ORDER.map((platform) =>
                 platform === 'windows' ? (
                   <DesktopWebAppCard key={platform} dict={dict} />
+                ) : platform === 'ios' ? (
+                  <IosWebAppCard key={platform} dict={dict} />
                 ) : (
                   <DownloadCard key={platform} info={DOWNLOADS[platform]} dict={dict} />
                 ),
               )}
             </div>
-            {anyPending && (
-              <p className="mt-4 max-w-prose text-body text-ink-2">
-                {dict.download.pendingHint}
-              </p>
-            )}
             <AndroidInstallGuide dict={dict} />
+            <IosInstallGuide dict={dict} />
           </div>
         </section>
       </main>

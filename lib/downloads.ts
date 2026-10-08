@@ -23,6 +23,12 @@ export const ANDROID_SIGNING_SHA256_FINGERPRINT: string | null =
  */
 export const DESKTOP_WEBAPP_URL = 'https://app.fizzchat.cc';
 
+/**
+ * iOS 版入口（T-P1-166）：iOS 端同样是 PWA，卡片跳转登录页并展示「添加到主屏幕」引导，
+ * 引导步骤出处见 lib/i18n.ts 的 iosInstall 注释。
+ */
+export const IOS_WEBAPP_URL = 'https://app.fizzchat.cc/#/login';
+
 export interface DownloadInfo {
   platform: Platform;
   /** 平台名是专有名词，两种语言都不翻译，所以不进 i18n 字典 */
@@ -52,8 +58,6 @@ export interface DownloadInfo {
    * 不需要再改代码。在此之前一律为 null，不展示编造的校验和。
    */
   sha256: string | null;
-  /** iOS 走 TestFlight 外链，不是直链下载，需要新标签页打开 */
-  testflight?: boolean;
 }
 
 export const DOWNLOADS: Record<Platform, DownloadInfo> = {
@@ -92,8 +96,8 @@ export const DOWNLOADS: Record<Platform, DownloadInfo> = {
     filename: null,
     version: null,
     sizeLabel: null,
+    // iOS 不走安装包，由 `app/home-client.tsx` 的 `IosWebAppCard` 渲染（指向 IOS_WEBAPP_URL）。
     sha256: null,
-    testflight: true,
   },
 };
 

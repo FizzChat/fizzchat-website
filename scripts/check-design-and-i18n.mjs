@@ -179,7 +179,8 @@ const LEAD_PATHS = ['hero.lead', 'values.lead', 'promise.lead', 'download.lead']
 const BODY_PATHS = idx3
   .map((i) => `values.items[${i}].desc`)
   .concat(idx4.map((i) => `promise.items[${i}].desc`))
-  .concat(['download.pendingHint']);
+  .concat(idx3.map((i) => `iosInstall.steps[${i}].desc`))
+  .concat(['iosInstall.webAppBody', 'iosInstall.fallbackBody']);
 
 for (const [label, paths, max] of [
   ['标题 ≤12 字', TITLE_PATHS, 12],

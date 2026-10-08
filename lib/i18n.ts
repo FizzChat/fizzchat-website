@@ -75,8 +75,6 @@ export interface Dict {
     title: string;
     lead: string;
     pendingLabel: string;
-    pendingHint: string;
-    testflightHint: string;
     /**
      * 桌面版卡片（T-P1-148，2026-09-08）：不做 Windows/macOS 安装包，桌面端 = PWA。
      * 对标 Telegram Web / WhatsApp Web / Discord 官网下载页的「在浏览器中打开」入口——
@@ -87,6 +85,23 @@ export interface Dict {
     desktopCta: string;
     androidSub: string;
     iosSub: string;
+    /** iOS 卡片（T-P1-166）：iOS 端是 PWA，卡片 = 三步简版引导 + 跳转登录页的按钮 */
+    iosSteps: string[];
+    iosCta: string;
+  };
+  /**
+   * iPhone / iPad 添加到主屏幕引导（T-P1-166）。步骤按 Apple 官方支持文档
+   * 「Turn a website into an app in Safari on iPhone / iPad」（iOS / iPadOS 26–27）撰写，
+   * 菜单名使用 Apple 简体中文界面术语（共享 / 添加到主屏幕 / 编辑操作 / 作为网页 App 打开）。
+   */
+  iosInstall: {
+    title: string;
+    lead: string;
+    steps: FeatureItem[];
+    webAppTitle: string;
+    webAppBody: string;
+    fallbackTitle: string;
+    fallbackBody: string;
   };
   /**
    * Android 安装指引 + Play Protect 说明（T-P2-21，2026-09-08）。
@@ -186,16 +201,43 @@ export const DICTS: Record<Lang, Dict> = {
       title: '下载气泡',
       lead: '同一账号可在全部客户端登录。',
       pendingLabel: '即将发布',
-      pendingHint: 'iOS 版正在准备中，发布后将在此提供下载地址。',
-      testflightHint: '通过 TestFlight 安装',
       desktopTitle: '桌面版（Windows / macOS）',
       desktopSteps: [
         '用 Chrome 或 Edge 打开 app.fizzchat.cc。',
-        '点击地址栏右侧的安装图标，安装后即可像普通应用一样从桌面或开始菜单打开。',
+        '点击地址栏右侧的安装图标；也可打开浏览器菜单，在“投放、保存和分享”（Edge 为“应用”）下选择安装选项。安装后即可像普通应用一样从桌面或开始菜单打开。',
       ],
       desktopCta: '打开网页版',
       androidSub: 'Android 8.0 及以上',
       iosSub: 'iPhone · iPad',
+      iosSteps: [
+        '在 Safari 中打开登录页。',
+        '轻点“共享”，选择“添加到主屏幕”。',
+        '开启“作为网页 App 打开”，轻点“添加”。',
+      ],
+      iosCta: '打开登录页',
+    },
+    iosInstall: {
+      title: 'iPhone / iPad 添加到主屏幕',
+      lead: '气泡在 iOS 上以网页 App 的形式使用。请在 Safari 中完成以下步骤，即可从主屏幕直接打开。',
+      steps: [
+        {
+          title: '用 Safari 打开气泡',
+          desc: '轻点上方 iOS 卡片中的“打开登录页”，将进入 app.fizzchat.cc。请使用 Safari 完成后续步骤。',
+        },
+        {
+          title: '打开共享菜单',
+          desc: 'iPhone：轻点 Safari 工具栏中的“更多”按钮，再选择“共享”；若标签页栏位于顶部或底部，直接轻点“共享”按钮。iPad：轻点“共享”按钮，再选择“查看更多”。',
+        },
+        {
+          title: '添加到主屏幕',
+          desc: '在选项列表中向下滚动并轻点“添加到主屏幕”，开启“作为网页 App 打开”，然后轻点“添加”。',
+        },
+      ],
+      webAppTitle: '建议开启“作为网页 App 打开”',
+      webAppBody:
+        '开启后，气泡会以独立窗口运行，不显示 Safari 界面，并可接收通知。图标只会添加到当前设备，换设备时请重复以上步骤。',
+      fallbackTitle: '没有看到“添加到主屏幕”？',
+      fallbackBody: '滚动到共享菜单选项列表的底部，轻点“编辑操作”，再将“添加到主屏幕”加入列表即可。',
     },
     androidInstall: {
       title: 'Android 安装说明',
@@ -509,16 +551,43 @@ export const DICTS: Record<Lang, Dict> = {
       title: 'Download FizzChat',
       lead: 'The same account works on every platform.',
       pendingLabel: 'Coming soon',
-      pendingHint: 'The iOS app is in preparation. Its download link will appear here once it is released.',
-      testflightHint: 'Install through TestFlight',
       desktopTitle: 'Desktop (Windows / macOS)',
       desktopSteps: [
         'Open app.fizzchat.cc in Chrome or Edge.',
-        'Click the install icon in the address bar. Once installed, launch FizzChat from your desktop or Start menu like any other app.',
+        'Click the install icon in the address bar, or open the browser menu and choose the install option under Cast, save, and share (Apps in Edge). Once installed, launch FizzChat from your desktop or Start menu like any other app.',
       ],
       desktopCta: 'Open the web app',
       androidSub: 'Android 8.0 and later',
       iosSub: 'iPhone · iPad',
+      iosSteps: [
+        'Open the sign-in page in Safari.',
+        'Tap Share, then Add to Home Screen.',
+        'Turn on Open as Web App, then tap Add.',
+      ],
+      iosCta: 'Open sign-in page',
+    },
+    iosInstall: {
+      title: 'Add FizzChat to your iPhone or iPad Home Screen',
+      lead: 'FizzChat on iOS runs as a web app. Follow these steps in Safari to open it straight from your Home Screen.',
+      steps: [
+        {
+          title: 'Open FizzChat in Safari',
+          desc: 'Tap Open sign-in page on the iOS card above to go to app.fizzchat.cc, and continue in Safari.',
+        },
+        {
+          title: 'Open the Share menu',
+          desc: 'iPhone: tap the More button in the Safari toolbar, then Share. If your tab bar is at the top or bottom, tap the Share button directly. iPad: tap the Share button, then View More.',
+        },
+        {
+          title: 'Add to Home Screen',
+          desc: 'Scroll the list of options and tap Add to Home Screen, turn on Open as Web App, then tap Add.',
+        },
+      ],
+      webAppTitle: 'Keep Open as Web App turned on',
+      webAppBody:
+        'FizzChat then opens in its own window without the Safari interface and can send you notifications. The icon is added only to the device you use, so repeat these steps on each device.',
+      fallbackTitle: "Can't see Add to Home Screen?",
+      fallbackBody: 'Scroll to the bottom of the options list, tap Edit Actions, then add Add to Home Screen to the list.',
     },
     androidInstall: {
       title: 'Installing on Android',
