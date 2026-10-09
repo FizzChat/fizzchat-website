@@ -83,11 +83,11 @@ export const DOWNLOADS: Record<Platform, DownloadInfo> = {
     // （downloads/fizzchat-1.0.0.apk，Cache-Control: public, max-age=31536000,
     // immutable），不指向 fizzchat-latest.apk ——后者会被下次发布覆盖，指向它
     // 的话，用户点开下载链接时若正好撞上新版本发布会拿到错误内容。
-    url: 'https://minio.fizzchat.cc/downloads/fizzchat-1.0.10.apk',
+    url: 'https://minio.fizzchat.cc/downloads/fizzchat-1.0.11.apk',
     filename: 'FizzChat.apk',
-    version: '1.0.10',
-    sizeLabel: '153.8 MB',
-    sha256: '60cf80ffaa74c522af2cfae42db3c14103aa29c65bc5715d21ff3b24935956cf',
+    version: '1.0.11',
+    sizeLabel: '153.9 MB',
+    sha256: '350037eee4ddcb2a196a5ca7726e6bcf25609f570f87e9003f99bf7f2dbfdb8d',
   },
   ios: {
     platform: 'ios',
