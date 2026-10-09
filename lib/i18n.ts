@@ -204,7 +204,7 @@ export const DICTS: Record<Lang, Dict> = {
       desktopTitle: '桌面版（Windows / macOS）',
       desktopSteps: [
         '用 Chrome 或 Edge 打开 app.fizzchat.cc。',
-        '点击地址栏右侧的安装图标；也可打开浏览器菜单，在“投放、保存和分享”（Edge 为“应用”）下选择安装选项。安装后即可像普通应用一样从桌面或开始菜单打开。',
+        '点击地址栏右侧的安装图标；也可打开浏览器菜单，Chrome 选择“保存并分享”，Edge 选择“更多工具”→“应用”，再选择安装选项。安装后即可像普通应用一样从桌面或开始菜单打开。',
       ],
       desktopCta: '打开网页版',
       androidSub: 'Android 8.0 及以上',
@@ -554,7 +554,7 @@ export const DICTS: Record<Lang, Dict> = {
       desktopTitle: 'Desktop (Windows / macOS)',
       desktopSteps: [
         'Open app.fizzchat.cc in Chrome or Edge.',
-        'Click the install icon in the address bar, or open the browser menu and choose the install option under Cast, save, and share (Apps in Edge). Once installed, launch FizzChat from your desktop or Start menu like any other app.',
+        'Click the install icon in the address bar, or open the browser menu: in Chrome choose Save and share, in Edge choose More tools > Apps, then select the install option. Once installed, launch FizzChat from your desktop or Start menu like any other app.',
       ],
       desktopCta: 'Open the web app',
       androidSub: 'Android 8.0 and later',
