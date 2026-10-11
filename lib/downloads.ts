@@ -15,15 +15,6 @@ export const ANDROID_SIGNING_SHA256_FINGERPRINT: string | null =
   RELEASE_FINGERPRINTS[RELEASE_FINGERPRINTS.length - 1] ?? null;
 
 /**
- * 桌面版 Web 应用地址（T-P1-148，2026-09-08，主控裁定：上线不做 Windows/macOS 安装包，
- * 桌面端＝PWA 安装，对标 Telegram Web / WhatsApp Web / Discord 官网下载页的
- * 「在浏览器中打开」入口）。下载区的桌面卡片不走 DownloadInfo/isDownloadable 那一套
- * （它是「有没有安装包」的状态机，桌面版从设计上就没有安装包），改由
- * `app/home-client.tsx` 的 `DesktopWebAppCard` 直接引用这个常量渲染成始终可操作的卡片。
- */
-export const DESKTOP_WEBAPP_URL = 'https://app.fizzchat.cc';
-
-/**
  * iOS 版入口（T-P1-166）：iOS 端同样是 PWA，卡片跳转登录页并展示「添加到主屏幕」引导，
  * 引导步骤出处见 lib/i18n.ts 的 iosInstall 注释。
  */
@@ -64,15 +55,14 @@ export const DOWNLOADS: Record<Platform, DownloadInfo> = {
   windows: {
     platform: 'windows',
     label: 'Windows',
-    // 2026-09-08（T-P1-148）：桌面端不做原生安装包，这条记录不再驱动任何可见卡片——
-    // `app/home-client.tsx` 渲染 `windows` 这一格时用的是 `DesktopWebAppCard`
-    // （指向 DESKTOP_WEBAPP_URL 的网页版入口），不读这里的 url/filename。
-    // 字段原样保留只是让 `Record<Platform, DownloadInfo>` 保持完整，未来若真要发布
-    // 原生安装包，把 url/version/sizeLabel/sha256 填上即可，不需要改渲染逻辑本身。
-    url: null,
-    filename: 'FizzChat-Setup.exe',
-    version: null,
-    sizeLabel: null,
+    // 2026-10-11（T-P0-88）：Windows 原生安装包（Electron，NSIS 一键按用户安装，不需要管理员权限）。
+    // url 指向版本号那份，不指向会被下次发布覆盖的 latest.yml；
+    // 三件套（latest.yml + FizzChat_<版本>.exe + .blockmap）都在更新源 downloads/desktop/ 下。
+    // sha256 保持 null：Windows 安装包不要求用户手动核对校验和（见上面字段注释）。
+    url: 'https://minio.fizzchat.cc/downloads/desktop/FizzChat_1.0.3.exe',
+    filename: 'FizzChat_1.0.3.exe',
+    version: '1.0.3',
+    sizeLabel: '106.7 MB',
     sha256: null,
   },
   android: {

@@ -75,14 +75,9 @@ export interface Dict {
     title: string;
     lead: string;
     pendingLabel: string;
-    /**
-     * 桌面版卡片（T-P1-148，2026-09-08）：不做 Windows/macOS 安装包，桌面端 = PWA。
-     * 对标 Telegram Web / WhatsApp Web / Discord 官网下载页的「在浏览器中打开」入口——
-     * 卡片始终是可操作态（不套用 pending 占位卡的视觉），文案见 lib/downloads.ts 注释。
-     */
-    desktopTitle: string;
-    desktopSteps: string[];
-    desktopCta: string;
+    /** Windows 安装包卡（T-P0-88）：系统要求一行 + 首次安装 SmartScreen 提示一句；网页版入口由 iOS 卡承载 */
+    windowsSub: string;
+    windowsNote: string;
     androidSub: string;
     iosSub: string;
     /** iOS 卡片（T-P1-166）：iOS 端是 PWA，卡片 = 三步简版引导 + 跳转登录页的按钮 */
@@ -201,12 +196,8 @@ export const DICTS: Record<Lang, Dict> = {
       title: '下载气泡',
       lead: '同一账号可在全部客户端登录。',
       pendingLabel: '即将发布',
-      desktopTitle: '桌面版（Windows / macOS）',
-      desktopSteps: [
-        '用 Chrome 或 Edge 打开 app.fizzchat.cc。',
-        '点击地址栏右侧的安装图标；也可打开浏览器菜单，Chrome 选择“保存并分享”，Edge 选择“更多工具”→“应用”，再选择安装选项。安装后即可像普通应用一样从桌面或开始菜单打开。',
-      ],
-      desktopCta: '打开网页版',
+      windowsSub: 'Windows 10 及以上',
+      windowsNote: '首次安装时若出现“Windows 已保护你的电脑”，请点击“更多信息”，再点击“仍要运行”。',
       androidSub: 'Android 8.0 及以上',
       iosSub: 'iPhone · iPad',
       iosSteps: [
@@ -551,12 +542,8 @@ export const DICTS: Record<Lang, Dict> = {
       title: 'Download FizzChat',
       lead: 'The same account works on every platform.',
       pendingLabel: 'Coming soon',
-      desktopTitle: 'Desktop (Windows / macOS)',
-      desktopSteps: [
-        'Open app.fizzchat.cc in Chrome or Edge.',
-        'Click the install icon in the address bar, or open the browser menu: in Chrome choose Save and share, in Edge choose More tools > Apps, then select the install option. Once installed, launch FizzChat from your desktop or Start menu like any other app.',
-      ],
-      desktopCta: 'Open the web app',
+      windowsSub: 'Windows 10 and later',
+      windowsNote: 'If Windows shows “Windows protected your PC” during the first install, select More info, then Run anyway.',
       androidSub: 'Android 8.0 and later',
       iosSub: 'iPhone · iPad',
       iosSteps: [

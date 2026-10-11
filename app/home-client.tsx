@@ -21,7 +21,6 @@ import {
 } from 'lucide-react';
 import {
   ANDROID_SIGNING_SHA256_FINGERPRINT,
-  DESKTOP_WEBAPP_URL,
   DOWNLOADS,
   IOS_WEBAPP_URL,
   PLATFORM_ORDER,
@@ -106,9 +105,11 @@ function FeatureCard({
 }
 
 function DownloadCard({ info, dict }: { info: DownloadInfo; dict: Dict }) {
-  // windows / ios 走独立的网页版卡片（DesktopWebAppCard / IosWebAppCard），这里只服务 android 安装包卡。
+  // 安装包卡：Android / Windows 共用（iOS 是 PWA，走 IosWebAppCard）。
+  // Windows 额外带一句首次安装的系统提示（未签名安装包会触发 SmartScreen）。
   const Icon = PLATFORM_ICONS[info.platform];
-  const subLabel = dict.download.androidSub;
+  const isWindows = info.platform === 'windows';
+  const subLabel = isWindows ? dict.download.windowsSub : dict.download.androidSub;
 
   const head = (
     <>
@@ -153,6 +154,7 @@ function DownloadCard({ info, dict }: { info: DownloadInfo; dict: Dict }) {
           </span>
         )}
       </div>
+      {isWindows && <p className="mt-3 text-caption text-ink-2">{dict.download.windowsNote}</p>}
       {info.sha256 && (
         <p className="mt-2 break-all font-mono text-caption text-ink-2">SHA-256 {info.sha256}</p>
       )}
@@ -161,43 +163,8 @@ function DownloadCard({ info, dict }: { info: DownloadInfo; dict: Dict }) {
 }
 
 /**
- * 桌面版卡片（Windows / macOS，T-P1-148）。没有原生安装包——桌面端是 PWA，
- * 对标 Telegram Web / WhatsApp Web / Discord 官网下载页的「在浏览器中打开」入口：
- * 卡片本身始终是可操作态（不套用 DownloadCard 的 pending 占位视觉），
- * 两步说明 + 一个跳转网页版的主按钮，复用页面已有的 rounded-card / IconTile 视觉语言。
- */
-function DesktopWebAppCard({ dict }: { dict: Dict }) {
-  const d = dict.download;
-  return (
-    <div className="flex flex-col rounded-card border border-line bg-surface p-4 sm:p-6">
-      <IconTile icon={Monitor} />
-      <div className="mt-4 text-title font-semibold text-ink">{d.desktopTitle}</div>
-      <ol className="mt-3 flex-1 list-none space-y-1.5">
-        {d.desktopSteps.map((step, i) => (
-          <li key={step} className="flex gap-2 text-caption text-ink-2">
-            <span aria-hidden="true" className="shrink-0 font-semibold text-brand-text">
-              {i + 1}.
-            </span>
-            <span>{step}</span>
-          </li>
-        ))}
-      </ol>
-      <a
-        href={DESKTOP_WEBAPP_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="mt-4 inline-flex h-10 w-full items-center justify-center gap-1.5 rounded-ctl bg-brand-solid text-body font-semibold text-on-brand transition-colors duration-150 hover:bg-brand-solid-hover active:bg-brand-solid-active focus-visible:shadow-focus"
-      >
-        <ExternalLink className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
-        {d.desktopCta}
-      </a>
-    </div>
-  );
-}
-
-/**
  * iOS 卡片（T-P1-166）。iOS 端是 PWA：卡片给出三步简版引导，主按钮在新标签页打开登录页，
- * 完整说明见下方 IosInstallGuide。结构与 DesktopWebAppCard 一致（对标 Telegram Web /
+ * 完整说明见下方 IosInstallGuide。结构沿用步骤列表 + 主按钮（对标 Telegram Web /
  * WhatsApp Web 官网的「在浏览器中打开」入口），不引入新的视觉语言。
  */
 function IosWebAppCard({ dict }: { dict: Dict }) {
@@ -425,9 +392,7 @@ export default function HomeClient() {
             <SectionHeading title={dict.download.title} lead={dict.download.lead} />
             <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
               {PLATFORM_ORDER.map((platform) =>
-                platform === 'windows' ? (
-                  <DesktopWebAppCard key={platform} dict={dict} />
-                ) : platform === 'ios' ? (
+                platform === 'ios' ? (
                   <IosWebAppCard key={platform} dict={dict} />
                 ) : (
                   <DownloadCard key={platform} info={DOWNLOADS[platform]} dict={dict} />
