@@ -77,7 +77,17 @@ export interface Dict {
     pendingLabel: string;
     /** Windows 安装包卡（T-P0-88）：系统要求一行 + 首次安装 SmartScreen 提示一句；网页版入口由 iOS 卡承载 */
     windowsSub: string;
-    windowsNote: string;
+    /** Windows 下载被拦截说明（T-P1-234）：Edge / Chrome 下载信誉提示 + 运行时 SmartScreen；安装包暂未数字签名 */
+    windowsHelp: {
+      summary: string;
+      edgeTitle: string;
+      edge: string;
+      chromeTitle: string;
+      chrome: string;
+      runTitle: string;
+      run: string;
+      unsigned: string;
+    };
     androidSub: string;
     iosSub: string;
     /** iOS 卡片（T-P1-166）：iOS 端是 PWA，卡片 = 三步简版引导 + 跳转登录页的按钮 */
@@ -197,7 +207,16 @@ export const DICTS: Record<Lang, Dict> = {
       lead: '同一账号可在全部客户端登录。',
       pendingLabel: '即将发布',
       windowsSub: 'Windows 10 及以上',
-      windowsNote: '首次安装时若出现“Windows 已保护你的电脑”，请点击“更多信息”，再点击“仍要运行”。',
+      windowsHelp: {
+        summary: '下载或安装被拦截？',
+        edgeTitle: 'Microsoft Edge',
+        edge: '在下载列表中将鼠标移到该文件上，选择“…”→“保留”，再选择“显示更多”→“仍然保留”。',
+        chromeTitle: 'Google Chrome',
+        chrome: '在下载提示或下载列表中，对该文件选择“保留”；如出现进一步确认，请继续选择保留。',
+        runTitle: '运行安装程序时',
+        run: '若出现“Windows 已保护你的电脑”，请点击“更多信息”，再点击“仍要运行”。',
+        unsigned: '安装包暂未进行数字签名，因此首次下载时浏览器与系统会给出提示，属于正常现象。',
+      },
       androidSub: 'Android 8.0 及以上',
       iosSub: 'iPhone · iPad',
       iosSteps: [
@@ -543,7 +562,16 @@ export const DICTS: Record<Lang, Dict> = {
       lead: 'The same account works on every platform.',
       pendingLabel: 'Coming soon',
       windowsSub: 'Windows 10 and later',
-      windowsNote: 'If Windows shows “Windows protected your PC” during the first install, select More info, then Run anyway.',
+      windowsHelp: {
+        summary: 'Download or installation blocked?',
+        edgeTitle: 'Microsoft Edge',
+        edge: 'In the downloads list, hover over the file and select the three-dot menu, then Keep, then Show more, then Keep anyway.',
+        chromeTitle: 'Google Chrome',
+        chrome: 'In the download prompt or the downloads list, select Keep for the file. If a further confirmation appears, confirm that you want to keep it.',
+        runTitle: 'When running the installer',
+        run: 'If Windows shows “Windows protected your PC”, select More info, then Run anyway.',
+        unsigned: 'The installer is currently unsigned, so your browser and Windows show a notice on first download. This is expected.',
+      },
       androidSub: 'Android 8.0 and later',
       iosSub: 'iPhone · iPad',
       iosSteps: [

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import {
   Apple,
   ArrowRight,
+  ChevronDown,
   Download,
   ExternalLink,
   FileX,
@@ -136,7 +137,7 @@ function DownloadCard({ info, dict }: { info: DownloadInfo; dict: Dict }) {
     );
   }
 
-  return (
+  const card = (
     <a
       href={info.url ?? undefined}
       download={info.filename ?? undefined}
@@ -154,11 +155,49 @@ function DownloadCard({ info, dict }: { info: DownloadInfo; dict: Dict }) {
           </span>
         )}
       </div>
-      {isWindows && <p className="mt-3 text-caption text-ink-2">{dict.download.windowsNote}</p>}
       {info.sha256 && (
         <p className="mt-2 break-all font-mono text-caption text-ink-2">SHA-256 {info.sha256}</p>
       )}
     </a>
+  );
+
+  if (!isWindows) return card;
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="flex flex-1 flex-col [&>a]:flex-1">{card}</div>
+      <WindowsBlockedHelp dict={dict} />
+    </div>
+  );
+}
+
+/** Windows 下载 / 安装被拦截说明（T-P1-234）：原生 details 展开，卡片下方低调入口 */
+function WindowsBlockedHelp({ dict }: { dict: Dict }) {
+  const h = dict.download.windowsHelp;
+  const rows = [
+    { title: h.edgeTitle, body: h.edge },
+    { title: h.chromeTitle, body: h.chrome },
+    { title: h.runTitle, body: h.run },
+  ];
+  return (
+    <details className="group rounded-card border border-line bg-surface px-4 py-3 sm:px-6">
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-2 text-caption font-semibold text-brand-text focus-visible:shadow-focus [&::-webkit-details-marker]:hidden">
+        {h.summary}
+        <ChevronDown
+          className="h-4 w-4 shrink-0 transition-transform duration-150 group-open:rotate-180"
+          strokeWidth={2}
+          aria-hidden="true"
+        />
+      </summary>
+      <dl className="mt-3 space-y-3">
+        {rows.map((r) => (
+          <div key={r.title}>
+            <dt className="text-caption font-semibold text-ink">{r.title}</dt>
+            <dd className="mt-0.5 text-caption text-ink-2">{r.body}</dd>
+          </div>
+        ))}
+      </dl>
+      <p className="mt-3 border-t border-line pt-3 text-caption text-ink-2">{h.unsigned}</p>
+    </details>
   );
 }
 
