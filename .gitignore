@@ -42,3 +42,6 @@ response.html
 .env*
 # TypeScript 增量编译缓存（npx tsc --noEmit 会生成，不进仓）
 *.tsbuildinfo
+
+# 验证报告统一归档到 specs/reports，本仓不留（2026-10-13）
+/reports/
