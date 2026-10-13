@@ -59,9 +59,9 @@ export const DOWNLOADS: Record<Platform, DownloadInfo> = {
     // url 指向版本号那份，不指向会被下次发布覆盖的 latest.yml；
     // 三件套（latest.yml + FizzChat_<版本>.exe + .blockmap）都在更新源 downloads/desktop/ 下。
     // sha256 保持 null：Windows 安装包不要求用户手动核对校验和（见上面字段注释）。
-    url: 'https://minio.fizzchat.cc/downloads/desktop/FizzChat_1.0.5.exe',
-    filename: 'FizzChat_1.0.5.exe',
-    version: '1.0.5',
+    url: 'https://minio.fizzchat.cc/downloads/desktop/FizzChat_1.1.0.exe',
+    filename: 'FizzChat_1.1.0.exe',
+    version: '1.1.0',
     sizeLabel: '106.7 MB',
     sha256: null,
   },
