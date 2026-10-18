@@ -1,0 +1,7 @@
+# 书面处置（2026-10-18，T-P3-47）：braces 全版本无修复版（"high *"），仅 dev 依赖
+# （tailwindcss 3 / eslint-config-next 的 glob 链），只处理本仓自己的源码路径，不处理不可信输入，
+# 且不进入静态导出产物 out/。待 tailwindcss 升 4 或上游出修复版时移除本条。
+[[IgnoredVulns]]
+id = "GHSA-vfj7-8cjw-p6xm"
+ignoreUntil = 2027-04-18
+reason = "braces 无修复版；仅 dev 构建期工具链，处理自有源码 glob，不接触不可信输入，不进产物"
