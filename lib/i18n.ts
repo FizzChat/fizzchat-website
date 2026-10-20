@@ -287,7 +287,7 @@ export const DICTS: Record<Lang, Dict> = {
     privacy: {
       title: '隐私政策',
       updatedLabel: '最后更新',
-      updatedDate: '2026 年 9 月 23 日',
+      updatedDate: '2026 年 10 月 20 日',
       intro:
         'FizzChat（中文名「气泡」，以下简称“本应用”或“我们”）是一款采用邀请制的即时通讯产品。本隐私政策说明我们收集哪些信息、如何使用与存储这些信息、在何种情形下与第三方共享，以及您对自己的信息享有哪些权利。请在使用本应用前完整阅读本政策。',
       backHome: '返回首页',
@@ -355,7 +355,7 @@ export const DICTS: Record<Lang, Dict> = {
             '查阅与更正：您可以在应用内查看并修改昵称、头像与个人简介。用户名与手机号在注册后不可自行修改。',
             '找回账号：您可以通过密保问题与手机号找回密码。',
             '删除内容：您可以删除自己发布的动态，也可以删除本地保存的会话记录。',
-            '注销账号：您可以在设置中申请注销账号。注销将按第三节所述处理您的数据，且不可撤销。',
+            '注销账号：您可以在设置中申请注销账号。提交申请后 7 天内登录账号，即可撤回注销；期满后注销不可撤销，并将按第三节所述处理您的数据。',
             '撤回授权：您可以在系统设置中关闭相册、相机、麦克风与通知权限，相应功能将随之受限。',
             '投诉与咨询：您可以通过第九节的联系方式与我们联系。',
             '基于本应用的隐私定位，我们不提供把会话内容转存至应用之外的功能，也不提供生成外部可访问链接的分享功能。动态仅对您的好友可见，无法通过链接分享至应用之外。',
@@ -386,7 +386,7 @@ export const DICTS: Record<Lang, Dict> = {
     terms: {
       title: '服务条款',
       updatedLabel: '最后更新',
-      updatedDate: '2026 年 9 月 23 日',
+      updatedDate: '2026 年 10 月 20 日',
       intro:
         '欢迎使用 FizzChat（中文名「气泡」，以下简称“本应用”或“我们”）。本服务条款（以下简称“本条款”）构成您与本应用运营方之间就使用本应用达成的协议。当您注册账号、登录或以任何方式使用本应用时，即表示您已阅读、理解并同意本条款及《隐私政策》的全部内容。如您不同意其中任何内容，请停止使用本应用。',
       backHome: '返回首页',
@@ -406,7 +406,7 @@ export const DICTS: Record<Lang, Dict> = {
             '一个用户名对应一个账号；同一手机号仅可绑定一个账号。',
             '您应妥善保管账号、密码及密保答案。凡使用您的账号进行的操作均视为您本人所为，因您泄露或保管不善造成的损失由您自行承担。',
             '账号的所有权归本应用运营方所有，您享有使用权，不得转让、出借、出租或出售。',
-            '您可以随时在设置中申请注销账号，注销后我们将依据《隐私政策》处理您的数据。注销不可撤销，账户余额应在注销前处理完毕。',
+            '您可以随时在设置中申请注销账号。提交申请后 7 天内登录账号，即可撤回注销；期满后注销不可撤销，我们将依据《隐私政策》处理您的数据。账户余额应在注销前处理完毕。',
             '我们可能针对长期未使用的账号制定管理规则，届时将另行公告后执行。',
             '若您违反本条款，我们有权视情节采取警告、限制功能、暂停服务或永久封禁等措施；情节严重或依法应当立即处置的，我们有权不经事先通知直接执行。',
           ],
@@ -643,7 +643,7 @@ export const DICTS: Record<Lang, Dict> = {
     privacy: {
       title: 'Privacy Policy',
       updatedLabel: 'Last updated',
-      updatedDate: 'September 23, 2026',
+      updatedDate: 'October 20, 2026',
       intro:
         'FizzChat is an invitation-only messaging service. This Privacy Policy explains what information we collect, how we use and store it, when we disclose it, and what control you have over it. Please read it in full before you use the app.',
       backHome: 'Back to home',
@@ -711,7 +711,7 @@ export const DICTS: Record<Lang, Dict> = {
             'Access and correction. You can view and change your display name, profile photo, and bio in the app. Your username and phone number cannot be changed after registration.',
             'Account recovery. You can reset your password using your security question and phone number.',
             'Deleting content. You can delete the Moments you have posted and clear conversations stored on your device.',
-            'Deleting your account. You can request account deletion in Settings. Your data is then handled as described in section 3, and the deletion cannot be reversed.',
+            'Deleting your account. You can request account deletion in Settings. You can withdraw the request by signing in within 7 days of submitting it; after that period the deletion cannot be reversed, and your data is handled as described in section 3.',
             'Withdrawing permissions. You can revoke photo library, camera, microphone, and notification permissions in your system settings. The related features stop working when you do.',
             'Getting in touch. You can contact us using the details in section 9.',
             'Because of how FizzChat is designed, there is no way to save or transfer a conversation outside the app and no way to create a shareable public link. Moments are visible only to your contacts and cannot be shared outside the app.',
@@ -742,7 +742,7 @@ export const DICTS: Record<Lang, Dict> = {
     terms: {
       title: 'Terms of Service',
       updatedLabel: 'Last updated',
-      updatedDate: 'September 23, 2026',
+      updatedDate: 'October 20, 2026',
       intro:
         'Welcome to FizzChat. These Terms of Service (“Terms”) form the agreement between you and the operator of FizzChat (“we”, “us”) governing your use of the app. By registering an account, signing in, or otherwise using FizzChat, you confirm that you have read, understood, and accepted these Terms and our Privacy Policy. If you do not accept them, please stop using the app.',
       backHome: 'Back to home',
@@ -762,7 +762,7 @@ export const DICTS: Record<Lang, Dict> = {
             'One username corresponds to one account, and a phone number may be linked to only one account.',
             'Keep your account, password, and security answer to yourself. Anything done through your account is treated as done by you, and losses caused by disclosing your credentials or failing to protect them are yours to bear.',
             'The account belongs to the operator of FizzChat; you hold a right to use it. You may not transfer, lend, rent, or sell it.',
-            'You may request deletion of your account at any time in Settings. We then handle your data as set out in the Privacy Policy. Deletion cannot be reversed, so settle any remaining balance before you request it.',
+            'You may request deletion of your account at any time in Settings. You can withdraw the request by signing in within 7 days of submitting it; after that period the deletion cannot be reversed, and we handle your data as set out in the Privacy Policy. Settle any remaining balance before you request deletion.',
             'We may introduce rules for accounts that have gone unused for a long period. If we do, we will announce them before they take effect.',
             'If you breach these Terms, we may warn you, restrict features, suspend the service, or close your account permanently, according to the seriousness of the breach. Where the breach is severe or the law requires immediate action, we may act without notice.',
           ],
