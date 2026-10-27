@@ -59,9 +59,9 @@ export const DOWNLOADS: Record<Platform, DownloadInfo> = {
     // url 指向版本号那份，不指向会被下次发布覆盖的 latest.yml；
     // 三件套（latest.yml + FizzChat_<版本>.exe + .blockmap）都在更新源 downloads/desktop/ 下。
     // sha256 保持 null：Windows 安装包不要求用户手动核对校验和（见上面字段注释）。
-    url: 'https://minio.fizzchat.cc/downloads/desktop/FizzChat_1.2.2.exe',
-    filename: 'FizzChat_1.2.2.exe',
-    version: '1.2.2',
+    url: 'https://minio.fizzchat.cc/downloads/desktop/FizzChat_1.3.0.exe',
+    filename: 'FizzChat_1.3.0.exe',
+    version: '1.3.0',
     sizeLabel: '108.7 MB',
     sha256: null,
   },
@@ -73,11 +73,11 @@ export const DOWNLOADS: Record<Platform, DownloadInfo> = {
     // （downloads/fizzchat-1.0.0.apk，Cache-Control: public, max-age=31536000,
     // immutable），不指向 fizzchat-latest.apk ——后者会被下次发布覆盖，指向它
     // 的话，用户点开下载链接时若正好撞上新版本发布会拿到错误内容。
-    url: 'https://minio.fizzchat.cc/downloads/fizzchat-1.2.2.apk',
+    url: 'https://minio.fizzchat.cc/downloads/fizzchat-1.3.0.apk',
     filename: 'FizzChat.apk',
-    version: '1.2.2',
+    version: '1.3.0',
     sizeLabel: '125.3 MB',
-    sha256: 'ea2a1a5144e09b915b00a4ea23ba82a8899e70cec3d11b55e8c9a1dd2cbbe00c',
+    sha256: 'd924c2eacf33484bcee509d605c3399be31fdb81660b411d9cf4fcafbec12aee',
   },
   ios: {
     platform: 'ios',
