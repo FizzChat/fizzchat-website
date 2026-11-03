@@ -5,8 +5,8 @@ export type Platform = 'windows' | 'android' | 'ios';
 /**
  * Android 发布签名证书的 SHA-256 指纹，直接读自 `public/.well-known/assetlinks.json`
  * （App Links 域名校验文件，D-C3 已产出），不重复抄一份数值到别处，避免两处校验值日后走偏。
- * 该文件登记 debug + release 两条指纹（数组末位是 release，对应 `fizzchat-release.jks`，
- * 见 specs/reports/PRE_LAUNCH_CHECKLIST.md:80-82）；Android 安装指引「核对签名与校验和」
+ * 该文件第一条声明是正式包 cc.fizzchat.app，只登记 release 指纹（`fizzchat-release.jks`，
+ * 见 specs/reports/PRE_LAUNCH_CHECKLIST.md:80-82；T-P2-327 起不再登记公开可得的 debug 密钥）；Android 安装指引「核对签名与校验和」
  * 一节用的就是这个常量。release 密钥若日后轮换，改 assetlinks.json 即可同步到本页，
  * 这里不需要跟着改。
  */
